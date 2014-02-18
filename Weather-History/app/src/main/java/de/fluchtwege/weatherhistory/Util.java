@@ -1,4 +1,4 @@
-package com.example.footest;
+package de.fluchtwege.weatherhistory;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

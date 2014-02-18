@@ -1,4 +1,4 @@
-package com.example.footest;
+package de.fluchtwege.weatherhistory.ui;
 
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -10,6 +10,11 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.widget.TextView;
+
+import de.fluchtwege.weatherhistory.R;
+import de.fluchtwege.weatherhistory.Util;
+import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
+
 
 public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cursor> {
 

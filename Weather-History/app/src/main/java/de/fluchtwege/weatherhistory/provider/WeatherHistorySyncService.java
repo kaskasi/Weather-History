@@ -1,8 +1,12 @@
-package com.example.footest;
+package de.fluchtwege.weatherhistory.provider;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
+
+import de.fluchtwege.weatherhistory.io.ForecastHandler;
+import de.fluchtwege.weatherhistory.io.HistoryHandler;
+import de.fluchtwege.weatherhistory.io.Messages;
 
 public class WeatherHistorySyncService extends IntentService {
 

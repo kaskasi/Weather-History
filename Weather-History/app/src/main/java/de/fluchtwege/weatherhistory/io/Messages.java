@@ -1,4 +1,4 @@
-package com.example.footest;
+package de.fluchtwege.weatherhistory.io;
 
 public class Messages {
 

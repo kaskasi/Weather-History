@@ -1,10 +1,4 @@
-package com.example.footest;
-
-import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+package de.fluchtwege.weatherhistory.io;
 
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
@@ -15,7 +9,15 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.example.footest.WeatherHistoryContract.WeatherDataColumns;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import de.fluchtwege.weatherhistory.Util;
+import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 
 public class ForecastHandler extends BaseHandler {
 
@@ -72,8 +74,8 @@ public class ForecastHandler extends BaseHandler {
 
 		final ContentProviderOperation.Builder builder = ContentProviderOperation
 				.newInsert(WeatherHistoryContract.WeatherData.CONTENT_URI)
-				.withValue(WeatherDataColumns.MAX_CELSIUS, highCelsius)
-				.withValue(WeatherDataColumns.MIN_CELSIUS, lowCelsius).withValue(WeatherDataColumns.DATE, date);
+				.withValue(WeatherHistoryContract.WeatherDataColumns.MAX_CELSIUS, highCelsius)
+				.withValue(WeatherHistoryContract.WeatherDataColumns.MIN_CELSIUS, lowCelsius).withValue(WeatherHistoryContract.WeatherDataColumns.DATE, date);
 		return builder.build();
 	}
 

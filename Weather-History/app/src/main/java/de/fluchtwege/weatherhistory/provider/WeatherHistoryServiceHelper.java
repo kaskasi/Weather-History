@@ -1,8 +1,10 @@
-package com.example.footest;
+package de.fluchtwege.weatherhistory.provider;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
+import de.fluchtwege.weatherhistory.io.Messages;
 
 public class WeatherHistoryServiceHelper {
 
