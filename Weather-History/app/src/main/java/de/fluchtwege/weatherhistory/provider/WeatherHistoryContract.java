@@ -6,7 +6,7 @@ public class WeatherHistoryContract {
 
 	public static final String PATH_WEATHER_DATA = "weather_data";
 
-	public static final String CONTENT_AUTHORITY = "de.fluchtwege.weather_history.app";
+	public static final String CONTENT_AUTHORITY = "de.fluchtwege.weatherhistory";
 
 	public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
