@@ -10,103 +10,133 @@ import android.util.Log;
 
 import java.util.Arrays;
 
+import de.fluchtwege.weatherhistory.io.WeatherHistoryServiceHelper;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryDatabase.Tables;
 
 public class WeatherHistoryContentProvider extends ContentProvider {
 
-	protected final UriMatcher sUriMatcher = buildUriMatcher();
+    private static final int WEATHER_DATA = 100;
+    private static final int WEATHER_HISTORY = 101;
+    private static final String LOG_TAG = "WeatherHistoryContentProvider";
+    private static WeatherHistoryDatabase mOpenHelper = null;
+    protected final UriMatcher sUriMatcher = buildUriMatcher();
 
-	private static final int WEATHER_DATA = 100;
+    public UriMatcher buildUriMatcher() {
+        final String authority = WeatherHistoryContract.CONTENT_AUTHORITY;
+        final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+        matcher.addURI(authority, WeatherHistoryContract.PATH_WEATHER_DATA, WEATHER_DATA);
+        matcher.addURI(authority, WeatherHistoryContract.PATH_WEATHER_HISTORY, WEATHER_HISTORY);
+        return matcher;
+    }
 
-	private static final String LOG_TAG = "WeatherHistoryContentProvider";
+    @Override
+    public boolean onCreate() {
+        mOpenHelper = new WeatherHistoryDatabase(getContext());
+        return true;
+    }
 
-	private static WeatherHistoryDatabase mOpenHelper = null;
+    @Override
+    public String getType(Uri uri) {
+        Log.i(LOG_TAG, "uri: " + uri);
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case WEATHER_DATA: {
+                return WeatherHistoryContract.WeatherData.CONTENT_TYPE;
+            }
+            default: {
+                throw new UnsupportedOperationException("Unknown uri " + uri);
+            }
+        }
+    }
 
-	public UriMatcher buildUriMatcher() {
-		final String authority = WeatherHistoryContract.CONTENT_AUTHORITY;
-		final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-		matcher.addURI(authority, WeatherHistoryContract.PATH_WEATHER_DATA, WEATHER_DATA);
-		return matcher;
-	}
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        return 0;
+    }
 
-	@Override
-	public boolean onCreate() {
-		mOpenHelper = new WeatherHistoryDatabase(getContext());
-		return true;
-	}
+    @Override
+    public Uri insert(Uri uri, ContentValues values) {
+        final int match = sUriMatcher.match(uri);
+        Log.i(LOG_TAG, "insert( match:"+match +" uri: " + uri + " value: " + values + ")");
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
-	@Override
-	public String getType(Uri uri) {
-		Log.i(LOG_TAG, "uri: " + uri);
-		final int match = sUriMatcher.match(uri);
-		switch (match) {
-		case WEATHER_DATA: {
-			return WeatherHistoryContract.WeatherData.CONTENT_TYPE;
-		}
-		default: {
-			throw new UnsupportedOperationException("Unknown uri " + uri);
-		}
-		}
-	}
+        switch (match) {
+            case WEATHER_DATA: {
+                String[] selectionArgs = new String[]{((String) values
+                        .get(WeatherHistoryContract.WeatherDataColumns.DATE))};
+                String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " =? ";
+                Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
+                if (cursor.moveToFirst()) {
 
-	@Override
-	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		return 0;
-	}
+                    db.update(Tables.WEATHER_DATA, values, selection, selectionArgs);
+                } else {
+                    db.insert(Tables.WEATHER_DATA, null, values);
+                }
+                cursor.close();
+                getContext().getContentResolver().notifyChange(uri, null);
+                return WeatherHistoryContract.WeatherData.buildRegistrationUri();
+            }
+            case WEATHER_HISTORY: {
+                String[] selectionArgs = new String[]{((String) values
+                        .get(WeatherHistoryContract.WeatherDataColumns.DATE))};
+                String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " =? ";
+                Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
+                if (cursor.moveToFirst()) {
+                    db.update(Tables.WEATHER_DATA, values, selection, selectionArgs);
+                } else {
+                    db.insert(Tables.WEATHER_DATA, null, values);
+                }
+                cursor.close();
+                getContext().getContentResolver().notifyChange(uri, null);
+                return WeatherHistoryContract.WeatherHistory.buildRegistrationUri();
+            }
+            default: {
+                throw new UnsupportedOperationException("Unknown uri " + uri);
+            }
+        }
+    }
 
-	@Override
-	public Uri insert(Uri uri, ContentValues values) {
-		Log.i(LOG_TAG, "insert( uri: " + uri + " value: " + values + ")");
-		final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-		final int match = sUriMatcher.match(uri);
-		switch (match) {
-		case WEATHER_DATA: {
-			String[] selectionArgs = new String[] { ((String) values
-					.get(WeatherHistoryContract.WeatherDataColumns.DATE)) };
-			String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " =? ";
-			Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
-			if (cursor.moveToFirst()) {
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        final int match = sUriMatcher.match(uri);
+        Log.i(LOG_TAG, "query( match= "+match +" uri= " + uri + " proj= " + Arrays.toString(projection) + " selection= " + selection
+                + " selectionArgs= " + Arrays.toString(selectionArgs) + ")");
+        final SQLiteDatabase db = mOpenHelper.getReadableDatabase();
 
-				db.update(Tables.WEATHER_DATA, values, selection, selectionArgs);
-			} else {
-				db.insert(Tables.WEATHER_DATA, null, values);
-			}
-			cursor.close();
-			getContext().getContentResolver().notifyChange(uri, null);
-			return WeatherHistoryContract.WeatherData.buildRegistrationUri();
-		}
-		default: {
-			throw new UnsupportedOperationException("Unknown uri " + uri);
-		}
-		}
-	}
+        switch (match) {
+            case WEATHER_DATA: {
+                Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                if (cursor.moveToFirst()) {
 
-	@Override
-	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-		Log.i(LOG_TAG, "query( uri= " + uri + " proj= " + Arrays.toString(projection) + " selection= " + selection
-				+ " selectionArgs= " + Arrays.toString(selectionArgs) + ")");
-		final SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-		final int match = sUriMatcher.match(uri);
-		switch (match) {
-		case WEATHER_DATA: {
+                } else {
+                    WeatherHistoryServiceHelper.loadCurrentForecast(getContext());
+                }
 
-			Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
-			if (cursor.moveToFirst()) {
+                return cursor;
+            }
+            case WEATHER_HISTORY: {
+                Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, sortOrder);
+                Log.i(LOG_TAG,"cursor.getCount:"+cursor.getCount());
+                if (cursor.getCount() > 1) {
 
-			} else {
-				WeatherHistoryServiceHelper.loadCurrentForecast(getContext());
-			}
-			return cursor;
-		}
-		default: {
-			throw new UnsupportedOperationException("Unknown uri " + uri);
-		}
-		}
-	}
+                } else {
 
-	@Override
-	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-		return 0;
-	}
+
+                    WeatherHistoryServiceHelper.loadHistoricalData(getContext());
+                }
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                return cursor;
+            }
+            default: {
+                throw new UnsupportedOperationException("Unknown uri " + uri);
+            }
+        }
+    }
+
+    @Override
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        return 0;
+    }
 
 }

@@ -7,6 +7,12 @@ import java.util.Date;
 public class Util {
 
 	private static SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+    private static SimpleDateFormat historyFormat = new SimpleDateFormat("MMdd");
+
+    public static String getDateForHistory(){
+        Date d = new Date(System.currentTimeMillis());
+        return historyFormat.format(d);
+    }
 
 	public static String getCurrentDateFormatted() {
 		Date d = new Date(System.currentTimeMillis());

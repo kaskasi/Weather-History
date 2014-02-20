@@ -1,12 +1,8 @@
-package de.fluchtwege.weatherhistory.provider;
+package de.fluchtwege.weatherhistory.io;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
-
-import de.fluchtwege.weatherhistory.io.ForecastHandler;
-import de.fluchtwege.weatherhistory.io.HistoryHandler;
-import de.fluchtwege.weatherhistory.io.Messages;
 
 public class WeatherHistorySyncService extends IntentService {
 
@@ -28,8 +24,7 @@ public class WeatherHistorySyncService extends IntentService {
 		}
 		case Messages.INTENT_HISTORY: {
 			Bundle parameters = intent.getBundleExtra(Messages.PARAMETERS);
-			String date = parameters.getString(Messages.HISTORY_DATE);
-			new HistoryHandler(this, date);
+			new BatchHistoryHandler(this);
 			break;
 		}
 		default: {

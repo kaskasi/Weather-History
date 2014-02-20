@@ -1,28 +1,23 @@
 package de.fluchtwege.weatherhistory.io;
 
-import org.json.JSONObject;
-
 import android.content.Context;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONObject;
+
 public abstract class BaseHandler implements Listener<JSONObject>, ErrorListener {
 
-	private JsonObjectRequest mRequest = null;
+	protected JsonObjectRequest mRequest = null;
 	protected Context mCtx = null;
 
 	public BaseHandler(Context ctx) {
 		mCtx = ctx;
 	}
-
-	protected abstract void handleDone(JSONObject object);
-
-	protected abstract void handleFailed(VolleyError error);
 
 	protected abstract String getUrl();
 
@@ -34,14 +29,7 @@ public abstract class BaseHandler implements Listener<JSONObject>, ErrorListener
 		queue.add(mRequest);
 	}
 
-	@Override
-	public void onResponse(JSONObject object) {
-		handleDone(object);
-	}
 
-	@Override
-	public void onErrorResponse(VolleyError error) {
-		handleFailed(error);
-	}
+
 
 }

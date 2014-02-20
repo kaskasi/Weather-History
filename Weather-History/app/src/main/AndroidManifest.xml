@@ -14,7 +14,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <service android:name="de.fluchtwege.weatherhistory.provider.WeatherHistorySyncService"/>
+        <service android:name=".io.WeatherHistorySyncService"/>
     <provider
         android:name="de.fluchtwege.weatherhistory.provider.WeatherHistoryContentProvider"
         android:authorities="de.fluchtwege.weatherhistory"

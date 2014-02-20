@@ -5,6 +5,7 @@ import android.net.Uri;
 public class WeatherHistoryContract {
 
 	public static final String PATH_WEATHER_DATA = "weather_data";
+    public static final String PATH_WEATHER_HISTORY = "weather_history";
 
 	public static final String CONTENT_AUTHORITY = "de.fluchtwege.weatherhistory";
 
@@ -20,10 +21,21 @@ public class WeatherHistoryContract {
 	public interface WeatherDataQuery {
 
 		int _TOKEN_ALL = 0x00;
+        int _TOKEN_HISTORY =0x01;
 
 		String[] PROJECTION = { WeatherDataColumns.ID, WeatherDataColumns.MAX_CELSIUS, WeatherDataColumns.MIN_CELSIUS,
 				WeatherDataColumns.DATE };
-	}
+
+    }
+
+    public static class WeatherHistory implements WeatherDataColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_WEATHER_HISTORY).build();
+        public static final String CONTENT_TYPE = "vnd.android.cursor.item/vnd.fluchtwege.weatherhistory";
+
+        public static Uri buildRegistrationUri() {
+            return CONTENT_URI.buildUpon().build();
+        }
+    }
 
 	public static class WeatherData implements WeatherDataColumns {
 		public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_WEATHER_DATA).build();

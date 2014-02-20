@@ -1,82 +1,136 @@
 package de.fluchtwege.weatherhistory.ui;
 
-import android.database.ContentObserver;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.view.Menu;
-import android.widget.TextView;
 
 import de.fluchtwege.weatherhistory.R;
-import de.fluchtwege.weatherhistory.Util;
-import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 
 
-public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cursor> {
+public class MainActivity extends BaseActivity  {
 
-	TextView highTV = null;
-	TextView lowTV = null;
+    private static final String LOG_TAG = "MainActivity";
 
-	private Loader<Cursor> mLoader = null;
+//    TextView highTV = null;
+//    TextView lowTV = null;
+//    ListView historyLV = null;
+//    private Loader<Cursor> mLoader = null;
 
-	private final ContentObserver mWeatherDataObserver = new ContentObserver(new Handler()) {
-		public void onChange(boolean selfChange) {
-			mLoader.forceLoad();
-		}
-	};
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+//        highTV = (TextView) findViewById(R.id.high);
+//        lowTV = (TextView) findViewById(R.id.low);
+//        historyLV = (ListView) findViewById(R.id.list);
+    }
 
-		highTV = (TextView) findViewById(R.id.high);
-		lowTV = (TextView) findViewById(R.id.low);
-	}
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        mLoader = getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_ALL, null,
+//                this);
+//
+//    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		getContentResolver().registerContentObserver(WeatherHistoryContract.WeatherData.buildRegistrationUri(), true,
-				mWeatherDataObserver);
-		mLoader = getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_ALL, null,
-				this);
-	}
 
-	@Override
-	protected void onPause() {
-		getContentResolver().unregisterContentObserver(mWeatherDataObserver);
-		super.onPause();
 
-	}
+//    @Override
+//    public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
+//        switch (id) {
+//            case WeatherHistoryContract.WeatherDataQuery._TOKEN_ALL: {
+//
+//                String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " = ?";
+//                String[] selectionArgs = new String[]{"" + Util.getCurrentDateFormatted()};
+//                mLoader = new CursorLoader(this, WeatherHistoryContract.WeatherData.buildRegistrationUri(),
+//                        WeatherHistoryContract.WeatherDataQuery.PROJECTION, selection, selectionArgs, null);
+//                break;
+//            }
+//            case WeatherHistoryContract.WeatherDataQuery._TOKEN_HISTORY: {
+//                String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " LIKE ?";
+//                String[] selectionArgs = new String[]{"%" + Util.getDateForHistory()};
+//                String sortOrder = WeatherHistoryContract.WeatherDataColumns.DATE;
+//                mLoader = new CursorLoader(this, WeatherHistoryContract.WeatherHistory.buildRegistrationUri(),
+//                        WeatherHistoryContract.WeatherDataQuery.PROJECTION, selection, selectionArgs, sortOrder);
+//                break;
+//            }
+//        }
+//        return mLoader;
+//    }
+//
+//    @Override
+//    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+//        Log.i(LOG_TAG, "onLoadFinished id="+loader.getId());
+//        switch (loader.getId()) {
+//            case WeatherHistoryContract.WeatherDataQuery._TOKEN_ALL:  {
+//                mLoader = getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_HISTORY, null,
+//                        this);
+//
+//                if (cursor.moveToFirst()) {
+//                    int high = 0;
+//                    int low = 0;
+//                    high = cursor.getInt(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.MAX_CELSIUS));
+//                    low = cursor.getInt(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.MIN_CELSIUS));
+//                    highTV.setText("" + high);
+//                    lowTV.setText("" + low);
+//                }
+//                break;
+//            }
+//            case WeatherHistoryContract.WeatherDataQuery._TOKEN_HISTORY: {
+//                if (cursor.getCount() > 1){
+//                    cursor.moveToFirst();
+//                    String[] content = new String[cursor.getCount()];
+//
+//                    for (int i = 0; i < content.length; i++){
+//                        String helper = cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.DATE));
+//                                helper = helper + " min: "+cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.MIN_CELSIUS));
+//                        helper = helper + " max: "+cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.MAX_CELSIUS));
+//                        content[i] = helper ;
+//                        cursor.moveToNext();
+//                    }
+//                    historyLV.setAdapter(new HistoryAdapter(content));
+//                }
+//                break;
+//            }
+//        }
+//
+//    }
+//
+//    @Override
+//    public void onLoaderReset(Loader<Cursor> arg0) {
+//    }
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-		String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " = ?";
-		String[] selectionArgs = new String[] { "" + Util.getCurrentDateFormatted() };
-		mLoader = new CursorLoader(this, WeatherHistoryContract.WeatherData.buildRegistrationUri(),
-				WeatherHistoryContract.WeatherDataQuery.PROJECTION, selection, selectionArgs, null);
-		return mLoader;
-	}
-
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-		if (cursor.moveToFirst()) {
-			int high = 0;
-			int low = 0;
-			high = cursor.getInt(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.MAX_CELSIUS));
-			low = cursor.getInt(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.MIN_CELSIUS));
-			highTV.setText("" + high);
-			lowTV.setText("" + low);
-		}
-	}
-
-	@Override
-	public void onLoaderReset(Loader<Cursor> arg0) {
-	}
+//    private class HistoryAdapter extends BaseAdapter {
+//
+//        String[] content = null;
+//
+//        HistoryAdapter(String[] contentA) {
+//            content = contentA;
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            if (content == null) {
+//                return 0;
+//            }
+//            return content.length;
+//        }
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return content[position];
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//            TextView tv = new TextView(MainActivity.this);
+//            tv.setText(content[position]);
+//            return tv;
+//        }
+//    }
 
 }

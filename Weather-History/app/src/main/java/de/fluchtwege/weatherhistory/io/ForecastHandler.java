@@ -34,12 +34,16 @@ public class ForecastHandler extends BaseHandler {
 
 	public ForecastHandler(Context ctx) {
 		super(ctx);
+        Log.i(LOG_TAG,"Constructor");
 		handle();
 	}
 
-	@Override
-	protected void handleDone(JSONObject object) {
 
+
+
+    @Override
+    public void onResponse(JSONObject object) {
+        Log.i(LOG_TAG,"onResponse");
 		final ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
 		batch.add(parseForecast(object));
 		final ContentResolver resolver = mCtx.getContentResolver();
@@ -79,10 +83,7 @@ public class ForecastHandler extends BaseHandler {
 		return builder.build();
 	}
 
-	@Override
-	protected void handleFailed(VolleyError error) {
 
-	}
 
 	@Override
 	protected String getUrl() {
@@ -94,4 +95,8 @@ public class ForecastHandler extends BaseHandler {
 		return Request.Method.GET;
 	}
 
+    @Override
+    public void onErrorResponse(VolleyError volleyError) {
+        Log.i(LOG_TAG,"onErrorResponse");
+    }
 }
