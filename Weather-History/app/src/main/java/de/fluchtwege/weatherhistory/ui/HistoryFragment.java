@@ -45,6 +45,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         graphView.addSeries(highSeries);
         graphView.addSeries(lowSeries);
         graphView.setHorizontalLabels(mHorizontalLabels);
+        graphView.getGraphViewStyle().setTextSize(getResources().getDimension(R.dimen.small_text));
         mGraphLL.removeAllViews();
         mGraphLL.addView(graphView);
     }

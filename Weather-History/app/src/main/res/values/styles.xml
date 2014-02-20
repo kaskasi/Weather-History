@@ -1,8 +1,21 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.Weatherhistory">
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="AppTheme.View"></style>
+
+    <style name="AppTheme.View.TextView">
+        <item name="android:textSize">@dimen/text</item>
+    </style>
+
+    <style name="AppTheme.View.TextView.Small">
+        <item name="android:textSize">@dimen/small_text</item>
+    </style>
+
+    <style name="AppTheme.View.TextView.Big">
+        <item name="android:textSize">@dimen/big_text</item>
+    </style>
 </resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="@dimen/small"
+    android:background="@color/grey"
+    android:weightSum="3">
+
+
+    <fragment
+        android:layout_margin="@dimen/small"
+        android:name="de.fluchtwege.weatherhistory.ui.DetailFragment"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        tools:layout="@layout/detail" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical"
+        android:weightSum="2">
+
+
+        <fragment
+            android:layout_margin="@dimen/small"
+            android:name="de.fluchtwege.weatherhistory.ui.HistoryFragment"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            tools:layout="@layout/history" />
+
+
+        <fragment
+            android:layout_margin="@dimen/small"
+            android:name="de.fluchtwege.weatherhistory.ui.DetailFragment"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            tools:layout="@layout/detail" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

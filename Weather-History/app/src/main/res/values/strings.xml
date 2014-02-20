@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Weather-History</string>
+    <string name="history_header">Max und Min Temperatur seit 2006</string>
 </resources>
