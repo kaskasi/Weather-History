@@ -11,7 +11,7 @@
 
     <fragment
         android:layout_margin="@dimen/small"
-        android:name="de.fluchtwege.weatherhistory.ui.DetailFragment"
+        android:name="de.fluchtwege.weatherhistory.ui.WeatherStationFragment"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
@@ -36,7 +36,7 @@
 
         <fragment
             android:layout_margin="@dimen/small"
-            android:name="de.fluchtwege.weatherhistory.ui.DetailFragment"
+            android:name="de.fluchtwege.weatherhistory.ui.WeatherStationFragment"
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="0dp"

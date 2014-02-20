@@ -2,7 +2,6 @@ package de.fluchtwege.weatherhistory.ui;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -19,16 +18,16 @@ import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 /**
  * Created by jkettner on 20.02.14.
  */
-public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class WeatherStationFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String LOG_TAG = "DetailFragment";
+    private static final String LOG_TAG = "WeatherStationFragment";
     TextView highTV = null;
     TextView lowTV = null;
     private Loader<Cursor> mLoader = null;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.detail, container, false);
+
+    public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.weatherstation, container, false);
         if (getActivity().isFinishing()) {
             return root;
         }
@@ -36,6 +35,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         lowTV = (TextView) root.findViewById(R.id.low);
         mLoader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_ALL, null,
                 this);
+        showProgress();
         return root;
     }
 
@@ -66,6 +66,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     low = cursor.getInt(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.MIN_CELSIUS));
                     highTV.setText("" + high);
                     lowTV.setText("" + low);
+                    hideProgress();
                 }
                 break;
             }

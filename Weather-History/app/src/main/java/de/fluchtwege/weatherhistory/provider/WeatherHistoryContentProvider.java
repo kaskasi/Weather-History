@@ -106,23 +106,18 @@ public class WeatherHistoryContentProvider extends ContentProvider {
         switch (match) {
             case WEATHER_DATA: {
                 Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
-                cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 if (cursor.moveToFirst()) {
-
                 } else {
                     WeatherHistoryServiceHelper.loadCurrentForecast(getContext());
                 }
-
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 return cursor;
             }
             case WEATHER_HISTORY: {
                 Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, sortOrder);
                 Log.i(LOG_TAG,"cursor.getCount:"+cursor.getCount());
                 if (cursor.getCount() > 1) {
-
                 } else {
-
-
                     WeatherHistoryServiceHelper.loadHistoricalData(getContext());
                 }
                 cursor.setNotificationUri(getContext().getContentResolver(), uri);

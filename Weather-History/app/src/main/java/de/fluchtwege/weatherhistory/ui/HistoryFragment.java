@@ -2,7 +2,6 @@ package de.fluchtwege.weatherhistory.ui;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -25,7 +24,7 @@ import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 /**
  * Created by jkettner on 20.02.14.
  */
-public class HistoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class HistoryFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
     private static final String LOG_TAG = "HistoryFragment";
@@ -50,8 +49,8 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         mGraphLL.addView(graphView);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+    public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.history, container, false);
         if (getActivity().isFinishing()) {
             return root;
@@ -59,6 +58,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         mGraphLL = (LinearLayout) root.findViewById(R.id.graph_container);
         mLoader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_HISTORY, null,
                 this);
+        showProgress();
         return root;
     }
 
@@ -103,12 +103,12 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
                         mHorizontalLabels[i] = date.substring(0,4);
                         cursor.moveToNext();
                     }
+                    hideProgress();
                     showGraph();
                 }
                 break;
             }
         }
-        cursor.close();
     }
 
 
