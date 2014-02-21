@@ -35,7 +35,6 @@ public class CurrentWeatherFragment extends BaseFragment  implements LoaderManag
     private TextView mVisibilityTV = null;
     private TextView mTempTV = null;
     private NetworkImageView mIconNIV = null;
-    private NetworkImageView mWebcamNIV = null;
 
     private Loader<Cursor> mLoader = null;
     private RequestQueue mRequestQueue = null;
@@ -54,7 +53,7 @@ public class CurrentWeatherFragment extends BaseFragment  implements LoaderManag
         mHumidityTV= (TextView) root.findViewById(R.id.current_humidity);
         mVisibilityTV = (TextView) root.findViewById(R.id.current_visibility);
         mIconNIV = (NetworkImageView) root.findViewById(R.id.current_image);
-        mWebcamNIV = (NetworkImageView) root.findViewById(R.id.webcam_image);
+        NetworkImageView mWebcamNIV = (NetworkImageView) root.findViewById(R.id.webcam_image);
 
 
         mLoader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_ALL, null,
