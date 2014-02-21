@@ -5,4 +5,5 @@
     <dimen name="big_text">20dp</dimen>
     <dimen name="text">15dp</dimen>
     <dimen name="bigger">28dp</dimen>
+    <dimen name="tiny">5dp</dimen>
 </resources>

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         style="@style/AppTheme.View.TextView.Big"
         android:text="@string/history_header"
-        android:gravity="center" />
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"

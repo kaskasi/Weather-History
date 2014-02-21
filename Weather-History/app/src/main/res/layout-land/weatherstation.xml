@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/small"
     android:orientation="vertical"
     android:background="@android:color/white">
 
@@ -13,7 +12,7 @@
         android:text="@string/station_header"
         android:layout_marginTop="@dimen/small"
         android:layout_marginLeft="@dimen/small"
-        android:gravity="left" />
+        android:textStyle="bold" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -28,12 +27,10 @@
             android:layout_height="match_parent"
             android:shrinkColumns="*"
             android:layout_marginTop="@dimen/small"
-            android:paddingTop="@dimen/small"
             android:layout_marginLeft="@dimen/small"
-            android:paddingLeft="@dimen/small"
             android:layout_marginRight="@dimen/small">
 
-            <TableRow android:layout_marginTop="@dimen/small">
+            <TableRow android:layout_marginTop="@dimen/tiny">
 
                 <TextView
                     style="@style/AppTheme.View.TextView"
@@ -46,7 +43,7 @@
                     android:text="@string/station_country_label" />
             </TableRow>
 
-            <TableRow android:layout_marginTop="@dimen/small">
+            <TableRow android:layout_marginTop="@dimen/tiny">
 
                 <TextView
                     style="@style/AppTheme.View.TextView"
@@ -59,7 +56,7 @@
                     android:text="@string/station_city_label" />
             </TableRow>
 
-            <TableRow android:layout_marginTop="@dimen/small">
+            <TableRow android:layout_marginTop="@dimen/tiny">
 
                 <TextView
                     style="@style/AppTheme.View.TextView"
@@ -72,7 +69,7 @@
                     android:text="@string/station_lat_label" />
             </TableRow>
 
-            <TableRow android:layout_marginTop="@dimen/small">
+            <TableRow android:layout_marginTop="@dimen/tiny">
 
                 <TextView
                     style="@style/AppTheme.View.TextView"
@@ -93,11 +90,8 @@
             android:layout_height="wrap_content"
             style="@style/AppTheme.View.TextView"
             android:paddingTop="@dimen/bigger"
-            android:paddingRight="@dimen/small"
             android:layout_marginRight="@dimen/small"
-            android:paddingLeft="@dimen/small"
-            android:text="@string/station_desc"
-            android:layout_marginTop="@dimen/small" />
+            android:text="@string/station_desc" />
     </LinearLayout>
 
 </LinearLayout>

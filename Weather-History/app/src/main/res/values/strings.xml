@@ -30,8 +30,8 @@
         einer der aussergewöhnlichsten Flugplätze in Deutschland. Fast 70 km vom Festland entfernt
         liegt er mitten in der Nordsee, 5 Bootsminuten von der einzigen deutschen Hochseeinsel
         Helgoland entfernt.</string>
-
-
+    <string name="max_series">Max</string>
+    <string name="min_series">Min</string>
 
 
 </resources>
