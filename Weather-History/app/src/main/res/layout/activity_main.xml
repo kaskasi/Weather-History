@@ -8,10 +8,9 @@
     android:background="@color/grey"
     >
 
-    <fragment
-        android:name="de.fluchtwege.weatherhistory.ui.HistoryFragment"
+    <FrameLayout
+        android:id="@+id/tab_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/detail" />
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

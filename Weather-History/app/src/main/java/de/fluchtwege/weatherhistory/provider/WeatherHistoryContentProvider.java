@@ -37,7 +37,7 @@ public class WeatherHistoryContentProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        Log.i(LOG_TAG, "uri: " + uri);
+        Log.d(LOG_TAG, "uri: " + uri);
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case WEATHER_DATA: {
@@ -57,7 +57,7 @@ public class WeatherHistoryContentProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         final int match = sUriMatcher.match(uri);
-        Log.i(LOG_TAG, "insert( match:"+match +" uri: " + uri + " value: " + values + ")");
+        Log.d(LOG_TAG, "insert( match:"+match +" uri: " + uri + " value: " + values + ")");
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
         switch (match) {
@@ -99,7 +99,7 @@ public class WeatherHistoryContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         final int match = sUriMatcher.match(uri);
-        Log.i(LOG_TAG, "query( match= "+match +" uri= " + uri + " proj= " + Arrays.toString(projection) + " selection= " + selection
+        Log.d(LOG_TAG, "query( match= "+match +" uri= " + uri + " proj= " + Arrays.toString(projection) + " selection= " + selection
                 + " selectionArgs= " + Arrays.toString(selectionArgs) + ")");
         final SQLiteDatabase db = mOpenHelper.getReadableDatabase();
 

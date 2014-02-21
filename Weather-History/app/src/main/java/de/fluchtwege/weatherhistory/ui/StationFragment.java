@@ -18,9 +18,9 @@ import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 /**
  * Created by jkettner on 20.02.14.
  */
-public class WeatherStationFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class StationFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String LOG_TAG = "WeatherStationFragment";
+    private static final String LOG_TAG = "sStationFragment";
     TextView highTV = null;
     TextView lowTV = null;
     private Loader<Cursor> mLoader = null;

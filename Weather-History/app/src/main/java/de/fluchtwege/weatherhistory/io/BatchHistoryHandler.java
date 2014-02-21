@@ -54,7 +54,7 @@ public class BatchHistoryHandler extends BaseHandler {
 
     @Override
     public void onResponse(JSONObject object) {
-        Log.i(LOG_TAG,"onResponse");
+        Log.d(LOG_TAG,"onResponse");
         numberOfCalls--;
         batch.add(parseHistory(object));
         try {
@@ -122,7 +122,7 @@ public class BatchHistoryHandler extends BaseHandler {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.i(LOG_TAG, "max: " + max + " min: " + min);
+        Log.v(LOG_TAG, "max: " + max + " min: " + min);
         final ContentProviderOperation.Builder builder = ContentProviderOperation
                 .newInsert(WeatherHistoryContract.WeatherHistory.CONTENT_URI)
                 .withValue(WeatherHistoryContract.WeatherDataColumns.MAX_CELSIUS, max)
@@ -138,7 +138,9 @@ public class BatchHistoryHandler extends BaseHandler {
     }
 
     private String getUrl(int id) {
-        return BASE_URL.replace(DATE, mUrls[id]);
+        String url = BASE_URL.replace(DATE, mUrls[id]);
+        Log.d(LOG_TAG, "url: "+url);
+        return url;
     }
 
 

@@ -34,7 +34,7 @@ public class ForecastHandler extends BaseHandler {
 
 	public ForecastHandler(Context ctx) {
 		super(ctx);
-        Log.i(LOG_TAG,"Constructor");
+        Log.d(LOG_TAG,"Constructor");
 		handle();
 	}
 
@@ -43,7 +43,7 @@ public class ForecastHandler extends BaseHandler {
 
     @Override
     public void onResponse(JSONObject object) {
-        Log.i(LOG_TAG,"onResponse");
+        Log.d(LOG_TAG,"onResponse");
 		final ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
 		batch.add(parseForecast(object));
 		final ContentResolver resolver = mCtx.getContentResolver();
@@ -69,8 +69,8 @@ public class ForecastHandler extends BaseHandler {
 			highCelsius = high.getInt(TAG_CELSIUS);
 			JSONObject low = forecastDay.getJSONObject(0).getJSONObject("low");
 			lowCelsius = low.getInt(TAG_CELSIUS);
-			Log.i(LOG_TAG, "low:" + lowCelsius);
-			Log.i(LOG_TAG, "high:" + highCelsius);
+			Log.v(LOG_TAG, "low:" + lowCelsius);
+			Log.v(LOG_TAG, "high:" + highCelsius);
 
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -97,6 +97,6 @@ public class ForecastHandler extends BaseHandler {
 
     @Override
     public void onErrorResponse(VolleyError volleyError) {
-        Log.i(LOG_TAG,"onErrorResponse");
+        Log.d(LOG_TAG,"onErrorResponse");
     }
 }
