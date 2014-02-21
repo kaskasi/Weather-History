@@ -1,6 +1,7 @@
 package de.fluchtwege.weatherhistory.ui;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -38,8 +39,8 @@ public class HistoryFragment extends BaseFragment implements LoaderManager.Loade
 
 
     private void showGraph() {
-        GraphViewSeries highSeries = new GraphViewSeries(mHighData);
-        GraphViewSeries lowSeries = new GraphViewSeries(mLowData);
+        GraphViewSeries highSeries = new GraphViewSeries(getString(R.string.max_series), new GraphViewSeries.GraphViewSeriesStyle(Color.rgb(250, 0, 0), 3), mHighData);
+        GraphViewSeries lowSeries = new GraphViewSeries(getString(R.string.min_series), new GraphViewSeries.GraphViewSeriesStyle(Color.rgb(0, 0, 250), 3), mLowData);
         GraphView graphView = new LineGraphView(getActivity(), "");
         graphView.addSeries(highSeries);
         graphView.addSeries(lowSeries);
@@ -99,8 +100,8 @@ public class HistoryFragment extends BaseFragment implements LoaderManager.Loade
                         } catch (NumberFormatException nfe) {
                         }
                         mHighData[i] = new GraphView.GraphViewData(i, high);
-                        mLowData [i] = new GraphView.GraphViewData(i, low);
-                        mHorizontalLabels[i] = date.substring(0,4);
+                        mLowData[i] = new GraphView.GraphViewData(i, low);
+                        mHorizontalLabels[i] = date.substring(0, 4);
                         cursor.moveToNext();
                     }
                     hideProgress();
