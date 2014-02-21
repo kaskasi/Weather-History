@@ -4,4 +4,5 @@
     <dimen name="small_text">7dp</dimen>
     <dimen name="big_text">14dp</dimen>
     <dimen name="text">11dp</dimen>
+    <dimen name="bigger">15dp</dimen>
 </resources>

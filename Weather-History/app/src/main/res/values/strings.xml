@@ -2,7 +2,23 @@
 <resources>
 
     <string name="app_name">Weather-History</string>
-    <string name="history_header">Max und Min Temperatur seit 2006</string>
+    <string name="history_header">Historische Wetterdaten</string>
+    <string name="current_header">Aktuelle Wetterdaten</string>
+    <string name="station_header">Wetterstation</string>
+
+    <string name="current_temp_label">Temperatur</string>
+    <string name="current_windspeed_label">Windgeschwindigkeit</string>
+    <string name="current_winddir_label">Windrichtung</string>
+    <string name="current_visibility_label">Sichtweite(in km)</string>
+    <string name="current_feelslike_label">Gefühlte Temperatur</string>
+    <string name="current_humidity_label">Luftfeuchtigkeit</string>
+
+    <string name="station_country_label">Land</string>
+    <string name="station_city_label">Stadt</string>
+    <string name="station_lon_label">Längengrad</string>
+    <string name="station_lat_label">Breitengrad</string>
+
+
     <string name="title_activity_weather_history">WeatherHistory</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -10,5 +26,12 @@
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
+    <string name="station_desc">Der Helgoländer Flughafen (Helgoland - Düne, edxh) ist
+        einer der aussergewöhnlichsten Flugplätze in Deutschland. Fast 70 km vom Festland entfernt
+        liegt er mitten in der Nordsee, 5 Bootsminuten von der einzigen deutschen Hochseeinsel
+        Helgoland entfernt.</string>
+
+
+
 
 </resources>

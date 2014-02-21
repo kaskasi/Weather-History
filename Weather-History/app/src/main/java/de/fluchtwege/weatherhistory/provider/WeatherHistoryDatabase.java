@@ -23,7 +23,11 @@ public class WeatherHistoryDatabase extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + Tables.WEATHER_DATA + " ( " + WeatherDataColumns.ID
 				+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + WeatherDataColumns.MAX_CELSIUS + " INTEGER DEFAULT 0, "
-				+ WeatherDataColumns.MIN_CELSIUS + " INTEGER DEFAULT 0, " + WeatherDataColumns.DATE + " STRING ) ");
+				+ WeatherDataColumns.MIN_CELSIUS + " INTEGER DEFAULT 0, " + WeatherDataColumns.DATE + " STRING, "
+                + WeatherDataColumns.VISIBILITY_KM + " STRING, "+ WeatherDataColumns.WIND_DIR + " STRING, "+ WeatherDataColumns.WIND_KPH + " STRING, "
+                + WeatherDataColumns.RELATIVE_HUMIDITY + " STRING, "+ WeatherDataColumns.ICON_URL + " STRING, "+ WeatherDataColumns.CITY + " STRING, "
+                + WeatherDataColumns.COUNTRY + " STRING, "+ WeatherDataColumns.FEELSLIKE_C + " STRING, "+ WeatherDataColumns.LAT + " STRING, "
+                + WeatherDataColumns.LON+ " STRING, "+ WeatherDataColumns.TEMP_C + " STRING " +") ");
 	}
 
 	@Override

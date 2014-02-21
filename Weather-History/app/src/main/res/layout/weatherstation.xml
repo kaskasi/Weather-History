@@ -1,38 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/small"
+    android:orientation="vertical"
     android:background="@android:color/white">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="high"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
+        style="@style/AppTheme.View.TextView.Big"
+        android:text="@string/station_header"
+        android:layout_marginTop="@dimen/small"
+        android:gravity="center" />
+
+    <TableLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        android:layout_marginTop="@dimen/small"
+        android:paddingTop="@dimen/small"
+        android:layout_marginLeft="@dimen/small"
+        android:paddingLeft="@dimen/small"
+        android:layout_marginRight="@dimen/small">
+
+        <TableRow android:layout_marginTop="@dimen/small">
+
+            <TextView
+                style="@style/AppTheme.View.TextView"
+                android:text="@string/station_country_label" />
+
+            <TextView
+                android:id="@+id/station_country"
+                style="@style/AppTheme.View.TextView"
+                android:gravity="center_horizontal"
+                android:text="@string/station_country_label" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="@dimen/small">
+
+            <TextView
+                style="@style/AppTheme.View.TextView"
+                android:text="@string/station_city_label" />
+
+            <TextView
+                android:id="@+id/station_city"
+                style="@style/AppTheme.View.TextView"
+                android:gravity="center_horizontal"
+                android:text="@string/station_city_label" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="@dimen/small">
+
+            <TextView
+                style="@style/AppTheme.View.TextView"
+                android:text="@string/station_lat_label" />
+
+            <TextView
+                android:id="@+id/station_lat"
+                style="@style/AppTheme.View.TextView"
+                android:gravity="center_horizontal"
+                android:text="@string/station_lat_label" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="@dimen/small">
+
+            <TextView
+                style="@style/AppTheme.View.TextView"
+                android:text="@string/station_lon_label" />
+
+            <TextView
+                android:id="@+id/station_lon"
+                style="@style/AppTheme.View.TextView"
+                android:gravity="center_horizontal"
+                android:text="@string/station_lon_label" />
+        </TableRow>
+
+    </TableLayout>
 
     <TextView
-        android:id="@+id/high"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="0c" />
+        style="@style/AppTheme.View.TextView"
+        android:paddingTop="@dimen/bigger"
+        android:layout_marginLeft="@dimen/small"
+        android:paddingRight="@dimen/small"
+        android:layout_marginRight="@dimen/small"
+        android:paddingLeft="@dimen/small"
+        android:text="@string/station_desc"
+        android:layout_marginTop="@dimen/small" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="low"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/high" />
 
-    <TextView
-        android:id="@+id/low"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/high"
-        android:text="0c" />
-</RelativeLayout>
+</LinearLayout>

@@ -31,10 +31,9 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener 
             ActionBar actionBar = getSupportActionBar();
 
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-            actionBar.addTab(actionBar.newTab().setText("Wetterstation").setTabListener(this));
-            actionBar.addTab(actionBar.newTab().setText("Aktuelles Wetter").setTabListener(this));
-            actionBar.addTab(actionBar.newTab().setText("Wetterdaten").setTabListener(this));
+            actionBar.addTab(actionBar.newTab().setText(getString(R.string.current_header)).setTabListener(this));
+            actionBar.addTab(actionBar.newTab().setText(getString(R.string.station_header)).setTabListener(this));
+            actionBar.addTab(actionBar.newTab().setText(getString(R.string.history_header)).setTabListener(this));
 
         }
 
@@ -43,7 +42,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        if (tab.getText().equals("Wetterstation")) {
+        if (tab.getText().equals(getString(R.string.station_header))) {
             mCurrentCWF = (CurrentWeatherFragment) getSupportFragmentManager().findFragmentByTag(TAG_CURRENT);
             if (mCurrentCWF != null && !mCurrentCWF.isDetached()) {
                 ft.hide(mCurrentCWF);
@@ -60,7 +59,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener 
                 ft.add(R.id.tab_container, mStationSF, TAG_STATION);
             }
 
-        } else if (tab.getText().equals("Aktuelles Wetter")) {
+        } else if (tab.getText().equals(getString(R.string.current_header))) {
             mStationSF = (StationFragment) getSupportFragmentManager().findFragmentByTag(TAG_STATION);
             if (mStationSF != null && !mStationSF.isDetached()) {
                 ft.hide(mStationSF);
@@ -76,7 +75,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener 
                 mCurrentCWF = new CurrentWeatherFragment();
                 ft.add(R.id.tab_container, mCurrentCWF, TAG_CURRENT);
             }
-        } else if (tab.getText().equals("Wetterdaten")) {
+        } else if (tab.getText().equals(getString(R.string.history_header))) {
             mStationSF = (StationFragment) getSupportFragmentManager().findFragmentByTag(TAG_STATION);
             if (mStationSF != null && !mStationSF.isDetached()) {
                 ft.hide(mStationSF);

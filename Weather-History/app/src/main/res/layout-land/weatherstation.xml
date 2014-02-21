@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/small"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/AppTheme.View.TextView.Big"
+        android:text="@string/station_header"
+        android:layout_marginTop="@dimen/small"
+        android:layout_marginLeft="@dimen/small"
+        android:gravity="left" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TableLayout
+
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:shrinkColumns="*"
+            android:layout_marginTop="@dimen/small"
+            android:paddingTop="@dimen/small"
+            android:layout_marginLeft="@dimen/small"
+            android:paddingLeft="@dimen/small"
+            android:layout_marginRight="@dimen/small">
+
+            <TableRow android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    style="@style/AppTheme.View.TextView"
+                    android:text="@string/station_country_label" />
+
+                <TextView
+                    android:id="@+id/station_country"
+                    style="@style/AppTheme.View.TextView"
+                    android:gravity="center_horizontal"
+                    android:text="@string/station_country_label" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    style="@style/AppTheme.View.TextView"
+                    android:text="@string/station_city_label" />
+
+                <TextView
+                    android:id="@+id/station_city"
+                    style="@style/AppTheme.View.TextView"
+                    android:gravity="center_horizontal"
+                    android:text="@string/station_city_label" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    style="@style/AppTheme.View.TextView"
+                    android:text="@string/station_lat_label" />
+
+                <TextView
+                    android:id="@+id/station_lat"
+                    style="@style/AppTheme.View.TextView"
+                    android:gravity="center_horizontal"
+                    android:text="@string/station_lat_label" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    style="@style/AppTheme.View.TextView"
+                    android:text="@string/station_lon_label" />
+
+                <TextView
+                    android:id="@+id/station_lon"
+                    style="@style/AppTheme.View.TextView"
+                    android:gravity="center_horizontal"
+                    android:text="@string/station_lon_label" />
+            </TableRow>
+
+        </TableLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.View.TextView"
+            android:paddingTop="@dimen/bigger"
+            android:paddingRight="@dimen/small"
+            android:layout_marginRight="@dimen/small"
+            android:paddingLeft="@dimen/small"
+            android:text="@string/station_desc"
+            android:layout_marginTop="@dimen/small" />
+    </LinearLayout>
+
+</LinearLayout>
