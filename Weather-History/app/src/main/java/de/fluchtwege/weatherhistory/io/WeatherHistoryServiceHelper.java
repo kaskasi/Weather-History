@@ -17,8 +17,6 @@ public class WeatherHistoryServiceHelper {
 
     public static void loadHistoricalData(final Context ctx) {
         Log.d(LOG_TAG, "loadHistoricalData");
-        long now = System.currentTimeMillis();
-
         Intent history = new Intent(Intent.ACTION_SYNC, null, ctx, WeatherHistorySyncService.class);
         history.putExtra(WeatherHistorySyncService.SERVICE_TO_CALL, Messages.INTENT_HISTORY);
         ctx.startService(history);

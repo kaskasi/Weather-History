@@ -12,21 +12,21 @@ import org.json.JSONObject;
 
 public abstract class BaseHandler implements Listener<JSONObject>, ErrorListener {
 
-	protected JsonObjectRequest mRequest = null;
-	protected Context mCtx = null;
+	protected JsonObjectRequest request = null;
+	protected Context context = null;
 
 	public BaseHandler(Context ctx) {
-		mCtx = ctx;
+		context = ctx;
 	}
 
 	protected abstract String getUrl();
 
 	protected abstract int getMethod();
 
-	public void handle() {
-		mRequest = new JsonObjectRequest(getMethod(), getUrl(), null, this, this);
-		RequestQueue queue = Volley.newRequestQueue(mCtx);
-		queue.add(mRequest);
+	public void enqueueRequests() {
+		request = new JsonObjectRequest(getMethod(), getUrl(), null, this, this);
+		RequestQueue queue = Volley.newRequestQueue(context);
+		queue.add(request);
 	}
 
 

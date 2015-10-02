@@ -17,35 +17,23 @@ import de.fluchtwege.weatherhistory.R;
 import de.fluchtwege.weatherhistory.Util;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 
-/**
- * Created by jkettner on 20.02.14.
- */
 public class StationFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
-
-
 
     private static final String LOG_TAG = "StationFragment";
 
-    private TextView mCountryTV = null;
-    private TextView mCityTV = null;
-    private TextView mLonTV = null;
-    private TextView mLatTV = null;
-    private NetworkImageView mStationNIV = null;
+    private TextView countryText;
+    private TextView cityText;
+    private TextView longitudeText;
+    private TextView latitudeText;
 
     private Loader<Cursor> mLoader = null;
-
 
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.weatherstation, container, false);
         if (getActivity().isFinishing()) {
             return root;
         }
-
-        mCountryTV = (TextView) root.findViewById(R.id.station_country);
-        mCityTV = (TextView) root.findViewById(R.id.station_city);
-        mLatTV= (TextView) root.findViewById(R.id.station_lat);
-        mLonTV = (TextView) root.findViewById(R.id.station_lon);
-
+        initializeViews(root);
 
         mLoader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_STATION, null,
                 this);
@@ -53,11 +41,17 @@ public class StationFragment extends BaseFragment implements LoaderManager.Loade
         return root;
     }
 
+    private void initializeViews(ViewGroup root) {
+        countryText = (TextView) root.findViewById(R.id.station_country);
+        cityText = (TextView) root.findViewById(R.id.station_city);
+        latitudeText = (TextView) root.findViewById(R.id.station_lat);
+        longitudeText = (TextView) root.findViewById(R.id.station_lon);
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
         switch (id) {
             case WeatherHistoryContract.WeatherDataQuery._TOKEN_STATION: {
-
                 String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " = ?";
                 String[] selectionArgs = new String[]{"" + Util.getCurrentDateFormatted()};
                 mLoader = new CursorLoader(getActivity(), WeatherHistoryContract.WeatherStation.buildRegistrationUri(),
@@ -74,23 +68,35 @@ public class StationFragment extends BaseFragment implements LoaderManager.Loade
         switch (loader.getId()) {
             case WeatherHistoryContract.WeatherDataQuery._TOKEN_STATION: {
                 if (cursor.moveToFirst()) {
-                    String lat = cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.LAT));
-                    String lon = cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.LON));
-                    String city = cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.CITY));
-                    String country = cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.COUNTRY));
-
-                    mCountryTV.setText(country);
-                    mCityTV.setText(city);
-                    mLonTV.setText(lon);
-                    mLatTV.setText(lat);
-
-
-
+                    bindDataToViews(cursor);
                     hideProgress();
                 }
                 break;
             }
         }
+    }
+
+    private void bindDataToViews(Cursor cursor) {
+        countryText.setText(parseCountry(cursor));
+        cityText.setText(parseCity(cursor));
+        longitudeText.setText(parseLongitude(cursor));
+        latitudeText.setText(parseLatitude(cursor));
+    }
+
+    private String parseLatitude(Cursor cursor) {
+        return cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.COUNTRY));
+    }
+
+    private String parseLongitude(Cursor cursor) {
+        return cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.CITY));
+    }
+
+    private String parseCity(Cursor cursor) {
+        return cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.LON));
+    }
+
+    private String parseCountry(Cursor cursor) {
+        return cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.LAT));
     }
 
     @Override

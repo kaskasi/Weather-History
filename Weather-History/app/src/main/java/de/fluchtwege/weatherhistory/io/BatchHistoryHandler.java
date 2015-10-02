@@ -24,6 +24,8 @@ import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 
 public class BatchHistoryHandler extends BaseHandler {
 
+    //can only retrieve data of last 8 years due to free license for wundergroung
+    public static final int MAX_YEARS_OF_AVAILABLE_DATA = 8;
 
     private static final String LOG_TAG = "WHBaseHandler";
 
@@ -31,38 +33,52 @@ public class BatchHistoryHandler extends BaseHandler {
     private static final String TAG_DAILY_SUMMARY = "dailysummary";
     private static final String TAG_MAX_TEMP = "maxtempm";
     private static final String TAG_MIN_TEMP = "mintempm";
-    private static final String DATE = "[DATE]";
-    private static final String BASE_URL = "http://api.wunderground.com/api/56b55db73f36509e/history_[DATE]/q/DE/EDXH.json";
     private static final String TAG_DATE = "date";
     private static final String TAG_MDAY = "mday";
     private static final String TAG_MON = "mon";
     private static final String TAG_YEAR = "year";
 
-    ArrayList<ContentProviderOperation> batch = null;
-    int numberOfCalls = 0;
-    private String[] mUrls = null;
+    private static final String BASE_URL = "http://api.wunderground.com/api/56b55db73f36509e/history_[DATE]/q/DE/EDXH.json";
+    private static final String DATE = "[DATE]";
+
+    private ArrayList<ContentProviderOperation> operations;
+    private int numberOfCalls = 0;
 
     public BatchHistoryHandler(Context ctx) {
         super(ctx);
-        batch = new ArrayList<ContentProviderOperation>();
-        mUrls = new String[8];
+        operations = new ArrayList<ContentProviderOperation>();
+    }
 
-        for (int i =0; i < 8; i++) {
-            mUrls[i] = new StringBuilder("").append(2013-i).append(Util.getDateForHistory()).toString();
-            handle(i);
+    @Override
+    public void enqueueRequests() {
+        for (int i = 0; i < MAX_YEARS_OF_AVAILABLE_DATA; i++) {
+            String yearOfRequest = new StringBuilder("").append(2013 - i).append(Util.getDateForHistory()).toString();
+            enqueueRequestUrl(createRequestUrl(yearOfRequest));
             numberOfCalls++;
         }
     }
 
+    private void enqueueRequestUrl(String requestUrl) {
+        request = new JsonObjectRequest(getMethod(), requestUrl, null, this, this);
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+    }
+
+    private String createRequestUrl(String yearOfRequest) {
+        String url = BASE_URL.replace(DATE, yearOfRequest);
+        Log.d(LOG_TAG, "url: " + url);
+        return url;
+    }
+
     @Override
     public void onResponse(JSONObject object) {
-        Log.d(LOG_TAG,"onResponse");
+        Log.d(LOG_TAG, "onResponse");
         numberOfCalls--;
-        batch.add(parseHistory(object));
+        operations.add(parseHistory(object));
         try {
             if (numberOfCalls == 0) {
-                ContentResolver resolver = mCtx.getContentResolver();
-                resolver.applyBatch(WeatherHistoryContract.CONTENT_AUTHORITY, batch);
+                ContentResolver resolver = context.getContentResolver();
+                resolver.applyBatch(WeatherHistoryContract.CONTENT_AUTHORITY, operations);
             }
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -74,12 +90,12 @@ public class BatchHistoryHandler extends BaseHandler {
 
     @Override
     public void onErrorResponse(VolleyError volleyError) {
-        Log.i(LOG_TAG,"onErrorResponse");
+        Log.i(LOG_TAG, "onErrorResponse");
         try {
             numberOfCalls--;
-            if (numberOfCalls == 0 && batch.size() > 0) {
-                ContentResolver resolver = mCtx.getContentResolver();
-                resolver.applyBatch(WeatherHistoryContract.CONTENT_AUTHORITY, batch);
+            if (numberOfCalls == 0 && operations.size() > 0) {
+                ContentResolver resolver = context.getContentResolver();
+                resolver.applyBatch(WeatherHistoryContract.CONTENT_AUTHORITY, operations);
             }
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -89,62 +105,73 @@ public class BatchHistoryHandler extends BaseHandler {
     }
 
     private ContentProviderOperation parseHistory(JSONObject object) {
-        int max = 0;
-        int min = 0;
+        int maxTemp = 0;
+        int minTemp = 0;
         String date = null;
         try {
             if (object.has(TAG_HISTORY)) {
                 JSONObject history = object.getJSONObject(TAG_HISTORY);
-                if (history.has(TAG_DATE)){
-                    JSONObject datum = history.getJSONObject(TAG_DATE);
-                    if (datum.has(TAG_YEAR)){
-                        date = datum.getString(TAG_YEAR);
-                    }
-                    if (datum.has(TAG_MON)){
-                        date = date.concat(datum.getString(TAG_MON));
-                    }
-                    if (datum.has(TAG_MDAY)){
-                        date = date.concat(datum.getString(TAG_MDAY));
-                    }
-                }
-                if (history.has(TAG_DAILY_SUMMARY)) {
-                    JSONArray dailysummary = history.getJSONArray(TAG_DAILY_SUMMARY);
-                    if (dailysummary.length() > 0) {
-                        JSONObject summary = dailysummary.getJSONObject(0);
-                        if (summary.has(TAG_MAX_TEMP)) {
-                            max = summary.getInt(TAG_MAX_TEMP);
-                        }
-                        if (summary.has(TAG_MIN_TEMP)) {
-                            min = summary.getInt(TAG_MIN_TEMP);
-                        }
-                    }
-
-                }
+                date = parseHistoryDate(history);
+                maxTemp = parseHistoryMax(history);
+                minTemp = parseHistoryMin(history);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.v(LOG_TAG, "max: " + max + " min: " + min);
-        final ContentProviderOperation.Builder builder = ContentProviderOperation
+        Log.v(LOG_TAG, "max: " + maxTemp + " min: " + minTemp);
+        return createContentProviderOperationBuilder(maxTemp, minTemp, date).build();
+    }
+
+    private String parseHistoryDate(JSONObject history) throws JSONException {
+        String date = null;
+        if (history.has(TAG_DATE)) {
+            JSONObject datum = history.getJSONObject(TAG_DATE);
+            if (datum.has(TAG_YEAR)) {
+                date = datum.getString(TAG_YEAR);
+            }
+            if (datum.has(TAG_MON)) {
+                date = date.concat(datum.getString(TAG_MON));
+            }
+            if (datum.has(TAG_MDAY)) {
+                date = date.concat(datum.getString(TAG_MDAY));
+            }
+        }
+        return date;
+    }
+    private int parseHistoryMax(JSONObject history) throws JSONException {
+        int max = 0;
+        if (history.has(TAG_DAILY_SUMMARY)) {
+            JSONArray dailysummary = history.getJSONArray(TAG_DAILY_SUMMARY);
+            if (dailysummary.length() > 0) {
+                JSONObject summary = dailysummary.getJSONObject(0);
+                if (summary.has(TAG_MAX_TEMP)) {
+                    max = summary.getInt(TAG_MAX_TEMP);
+                }
+            }
+        }
+        return max;
+    }
+
+    private int parseHistoryMin(JSONObject history) throws JSONException {
+        int min = 0;
+        if (history.has(TAG_DAILY_SUMMARY)) {
+            JSONArray dailySummary = history.getJSONArray(TAG_DAILY_SUMMARY);
+            if (dailySummary.length() > 0) {
+                JSONObject summary = dailySummary.getJSONObject(0);
+                if (summary.has(TAG_MIN_TEMP)) {
+                    min = summary.getInt(TAG_MIN_TEMP);
+                }
+            }
+        }
+        return min;
+    }
+
+    private ContentProviderOperation.Builder createContentProviderOperationBuilder(int maxTemp, int minTemp, String date) {
+        return ContentProviderOperation
                 .newInsert(WeatherHistoryContract.WeatherHistory.CONTENT_URI)
-                .withValue(WeatherHistoryContract.WeatherDataColumns.MAX_CELSIUS, max)
-                .withValue(WeatherHistoryContract.WeatherDataColumns.MIN_CELSIUS, min).withValue(WeatherHistoryContract.WeatherDataColumns.DATE, date);
-        return builder.build();
+                .withValue(WeatherHistoryContract.WeatherDataColumns.MAX_CELSIUS, maxTemp)
+                .withValue(WeatherHistoryContract.WeatherDataColumns.MIN_CELSIUS, minTemp).withValue(WeatherHistoryContract.WeatherDataColumns.DATE, date);
     }
-
-    public void handle(int id) {
-        mRequest = new JsonObjectRequest(getMethod(), getUrl(id), null, this, this);
-        RequestQueue queue = Volley.newRequestQueue(mCtx);
-        queue.add(mRequest);
-
-    }
-
-    private String getUrl(int id) {
-        String url = BASE_URL.replace(DATE, mUrls[id]);
-        Log.d(LOG_TAG, "url: "+url);
-        return url;
-    }
-
 
     @Override
     protected String getUrl() {

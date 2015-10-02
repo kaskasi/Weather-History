@@ -30,8 +30,7 @@ public class StretchedNetworkImageView extends NetworkImageView{
             int imgWidth = d.getIntrinsicWidth();
             if (imgHeight > 0 && imgWidth > 0) {
                 int width = MeasureSpec.getSize(widthMeasureSpec);
-                int height = (int) ((double) imgHeight * (double) width /
-                (double) imgWidth);
+                int height = (int) ((double) imgHeight * (double) width / (double) imgWidth);
                 setMeasuredDimension(width, height);
             }
         }

@@ -22,32 +22,28 @@ import de.fluchtwege.weatherhistory.R;
 import de.fluchtwege.weatherhistory.Util;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 
-/**
- * Created by jkettner on 20.02.14.
- */
 public class HistoryFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-
     private static final String LOG_TAG = "HistoryFragment";
-    private Loader<Cursor> mLoader = null;
 
-    private LinearLayout mGraphLL = null;
+    private Loader<Cursor> loader = null;
 
-    private GraphView.GraphViewData[] mHighData = null;
-    private GraphView.GraphViewData[] mLowData = null;
-    private String mHorizontalLabels[] = null;
+    private LinearLayout graphContainer = null;
+    private GraphView.GraphViewData[] temperatureMaximums = null;
+    private GraphView.GraphViewData[] temperatureMinimums = null;
+    private String horizontalLabels[] = null;
 
 
     private void showGraph() {
-        GraphViewSeries highSeries = new GraphViewSeries(getString(R.string.max_series), new GraphViewSeries.GraphViewSeriesStyle(Color.rgb(250, 0, 0), 3), mHighData);
-        GraphViewSeries lowSeries = new GraphViewSeries(getString(R.string.min_series), new GraphViewSeries.GraphViewSeriesStyle(Color.rgb(0, 0, 250), 3), mLowData);
+        GraphViewSeries highSeries = new GraphViewSeries(getString(R.string.max_series), new GraphViewSeries.GraphViewSeriesStyle(Color.rgb(250, 0, 0), 3), temperatureMaximums);
+        GraphViewSeries lowSeries = new GraphViewSeries(getString(R.string.min_series), new GraphViewSeries.GraphViewSeriesStyle(Color.rgb(0, 0, 250), 3), temperatureMinimums);
         GraphView graphView = new LineGraphView(getActivity(), "");
         graphView.addSeries(highSeries);
         graphView.addSeries(lowSeries);
-        graphView.setHorizontalLabels(mHorizontalLabels);
+        graphView.setHorizontalLabels(horizontalLabels);
         graphView.getGraphViewStyle().setTextSize(getResources().getDimension(R.dimen.small_text));
-        mGraphLL.removeAllViews();
-        mGraphLL.addView(graphView);
+        graphContainer.removeAllViews();
+        graphContainer.addView(graphView);
     }
 
 
@@ -56,8 +52,8 @@ public class HistoryFragment extends BaseFragment implements LoaderManager.Loade
         if (getActivity().isFinishing()) {
             return root;
         }
-        mGraphLL = (LinearLayout) root.findViewById(R.id.graph_container);
-        mLoader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_HISTORY, null,
+        graphContainer = (LinearLayout) root.findViewById(R.id.graph_container);
+        loader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_HISTORY, null,
                 this);
         showProgress();
         return root;
@@ -71,12 +67,12 @@ public class HistoryFragment extends BaseFragment implements LoaderManager.Loade
                 String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " LIKE ?";
                 String[] selectionArgs = new String[]{"%" + Util.getDateForHistory()};
                 String sortOrder = WeatherHistoryContract.WeatherDataColumns.DATE;
-                mLoader = new CursorLoader(getActivity(), WeatherHistoryContract.WeatherHistory.buildRegistrationUri(),
+                loader = new CursorLoader(getActivity(), WeatherHistoryContract.WeatherHistory.buildRegistrationUri(),
                         WeatherHistoryContract.WeatherDataQuery.PROJECTION, selection, selectionArgs, sortOrder);
                 break;
             }
         }
-        return mLoader;
+        return loader;
     }
 
     @Override
@@ -84,26 +80,9 @@ public class HistoryFragment extends BaseFragment implements LoaderManager.Loade
         Log.i(LOG_TAG, "onLoadFinished id=" + loader.getId());
         switch (loader.getId()) {
             case WeatherHistoryContract.WeatherDataQuery._TOKEN_HISTORY: {
-                mHighData = new GraphView.GraphViewData[cursor.getCount()];
+                temperatureMaximums = new GraphView.GraphViewData[cursor.getCount()];
                 if (cursor.getCount() > 1) {
-                    mHighData = new GraphView.GraphViewData[cursor.getCount()];
-                    mLowData = new GraphView.GraphViewData[cursor.getCount()];
-                    mHorizontalLabels = new String[cursor.getCount()];
-                    cursor.moveToFirst();
-                    for (int i = 0; i < cursor.getCount(); i++) {
-                        int high = 0;
-                        int low = 0;
-                        String date = cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.DATE));
-                        try {
-                            low = Integer.parseInt(cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.MIN_CELSIUS)));
-                            high = Integer.parseInt(cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.MAX_CELSIUS)));
-                        } catch (NumberFormatException nfe) {
-                        }
-                        mHighData[i] = new GraphView.GraphViewData(i, high);
-                        mLowData[i] = new GraphView.GraphViewData(i, low);
-                        mHorizontalLabels[i] = date.substring(0, 4);
-                        cursor.moveToNext();
-                    }
+                    bindDataToViews(cursor);
                     hideProgress();
                     showGraph();
                 }
@@ -112,42 +91,41 @@ public class HistoryFragment extends BaseFragment implements LoaderManager.Loade
         }
     }
 
+    private void bindDataToViews(Cursor cursor) {
+        temperatureMaximums = new GraphView.GraphViewData[cursor.getCount()];
+        temperatureMinimums = new GraphView.GraphViewData[cursor.getCount()];
+        horizontalLabels = new String[cursor.getCount()];
+        cursor.moveToFirst();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            addHistoryEntry(cursor, i);
+            cursor.moveToNext();
+        }
+    }
+
+    private void addHistoryEntry(Cursor cursor, int index) {
+        int high = 0;
+        int low = 0;
+        String date = cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.DATE));
+        try {
+            low = parseMinTemperature(cursor);
+            high = parseMaxTemperature(cursor);
+        } catch (NumberFormatException nfe) {
+        }
+        temperatureMaximums[index] = new GraphView.GraphViewData(index, high);
+        temperatureMinimums[index] = new GraphView.GraphViewData(index, low);
+        horizontalLabels[index] = date.substring(0, 4);
+    }
+
+    private int parseMaxTemperature(Cursor cursor) {
+        return Integer.parseInt(cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.MAX_CELSIUS)));
+    }
+
+    private int parseMinTemperature(Cursor cursor) {
+        return Integer.parseInt(cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.MIN_CELSIUS)));
+    }
 
     @Override
     public void onLoaderReset(Loader<Cursor> arg0) {
     }
 
-    private class HistoryAdapter extends BaseAdapter {
-
-        String[] content = null;
-
-        HistoryAdapter(String[] contentA) {
-            content = contentA;
-        }
-
-        @Override
-        public int getCount() {
-            if (content == null) {
-                return 0;
-            }
-            return content.length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return content[position];
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView tv = new TextView(getActivity());
-            tv.setText(content[position]);
-            return tv;
-        }
-    }
 }

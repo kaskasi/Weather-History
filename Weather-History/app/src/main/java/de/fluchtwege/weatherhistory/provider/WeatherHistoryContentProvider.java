@@ -6,6 +6,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -19,9 +20,10 @@ public class WeatherHistoryContentProvider extends ContentProvider {
     private static final int WEATHER_HISTORY = 101;
     private static final int WEATHER_STATION = 102;
 
-    private static final String LOG_TAG = "WeatherHistoryContentProvider";
-    private static WeatherHistoryDatabase mOpenHelper = null;
-    protected final UriMatcher sUriMatcher = buildUriMatcher();
+    private static final String LOG_TAG = "WHContentProvider";
+
+    private static WeatherHistoryDatabase database = null;
+    protected final UriMatcher uriMatcher = buildUriMatcher();
 
     public UriMatcher buildUriMatcher() {
         final String authority = WeatherHistoryContract.CONTENT_AUTHORITY;
@@ -34,14 +36,14 @@ public class WeatherHistoryContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mOpenHelper = new WeatherHistoryDatabase(getContext());
+        database = new WeatherHistoryDatabase(getContext());
         return true;
     }
 
     @Override
     public String getType(Uri uri) {
         Log.d(LOG_TAG, "uri: " + uri);
-        final int match = sUriMatcher.match(uri);
+        final int match = uriMatcher.match(uri);
         switch (match) {
             case WEATHER_DATA: {
                 return WeatherHistoryContract.WeatherData.CONTENT_TYPE;
@@ -59,53 +61,19 @@ public class WeatherHistoryContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        final int match = sUriMatcher.match(uri);
+        final int match = uriMatcher.match(uri);
         Log.d(LOG_TAG, "insert( match:" + match + " uri: " + uri + " value: " + values + ")");
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final SQLiteDatabase db = database.getWritableDatabase();
+        insertWeatherData(uri, values, db);
 
         switch (match) {
             case WEATHER_DATA: {
-                String[] selectionArgs = new String[]{((String) values
-                        .get(WeatherHistoryContract.WeatherDataColumns.DATE))};
-                String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " =? ";
-                Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
-                if (cursor.moveToFirst()) {
-
-                    db.update(Tables.WEATHER_DATA, values, selection, selectionArgs);
-                } else {
-                    db.insert(Tables.WEATHER_DATA, null, values);
-                }
-                cursor.close();
-                getContext().getContentResolver().notifyChange(uri, null);
                 return WeatherHistoryContract.WeatherData.buildRegistrationUri();
             }
             case WEATHER_STATION: {
-                String[] selectionArgs = new String[]{((String) values
-                        .get(WeatherHistoryContract.WeatherDataColumns.DATE))};
-                String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " =? ";
-                Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
-                if (cursor.moveToFirst()) {
-
-                    db.update(Tables.WEATHER_DATA, values, selection, selectionArgs);
-                } else {
-                    db.insert(Tables.WEATHER_DATA, null, values);
-                }
-                cursor.close();
-                getContext().getContentResolver().notifyChange(uri, null);
                 return WeatherHistoryContract.WeatherStation.buildRegistrationUri();
             }
             case WEATHER_HISTORY: {
-                String[] selectionArgs = new String[]{((String) values
-                        .get(WeatherHistoryContract.WeatherDataColumns.DATE))};
-                String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " =? ";
-                Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
-                if (cursor.moveToFirst()) {
-                    db.update(Tables.WEATHER_DATA, values, selection, selectionArgs);
-                } else {
-                    db.insert(Tables.WEATHER_DATA, null, values);
-                }
-                cursor.close();
-                getContext().getContentResolver().notifyChange(uri, null);
                 return WeatherHistoryContract.WeatherHistory.buildRegistrationUri();
             }
             default: {
@@ -114,46 +82,67 @@ public class WeatherHistoryContentProvider extends ContentProvider {
         }
     }
 
+    private void insertWeatherData(Uri uri, ContentValues values, SQLiteDatabase db) {
+        String[] selectionArgs = new String[]{((String) values
+                .get(WeatherHistoryContract.WeatherDataColumns.DATE))};
+        String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " =? ";
+        Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
+        if (cursor.moveToFirst()) {
+            db.update(Tables.WEATHER_DATA, values, selection, selectionArgs);
+        } else {
+            db.insert(Tables.WEATHER_DATA, null, values);
+        }
+        cursor.close();
+        getContext().getContentResolver().notifyChange(uri, null);
+    }
+
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        final int match = sUriMatcher.match(uri);
+        final int match = uriMatcher.match(uri);
         Log.d(LOG_TAG, "query( match= " + match + " uri= " + uri + " proj= " + Arrays.toString(projection) + " selection= " + selection
                 + " selectionArgs= " + Arrays.toString(selectionArgs) + ")");
-        final SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        final SQLiteDatabase db = database.getReadableDatabase();
 
         switch (match) {
             case WEATHER_DATA: {
-                Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
-                if (cursor.moveToFirst()) {
-                } else {
-                    WeatherHistoryServiceHelper.loadCurrentForecast(getContext());
-                }
-                cursor.setNotificationUri(getContext().getContentResolver(), uri);
-                return cursor;
+                return createWeatherDataQuery(uri, selection, selectionArgs, db);
             }
             case WEATHER_STATION: {
-                Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
-                if (cursor.moveToFirst()) {
-//                } else {
-//                    WeatherHistoryServiceHelper.loadCurrentForecast(getContext());
-                }
-                cursor.setNotificationUri(getContext().getContentResolver(), uri);
-                return cursor;
+                return createWeatherStationQuery(uri, selection, selectionArgs, db);
             }
             case WEATHER_HISTORY: {
-                Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, sortOrder);
-                Log.i(LOG_TAG, "cursor.getCount:" + cursor.getCount());
-                if (cursor.getCount() > 1) {
-                } else {
-                    WeatherHistoryServiceHelper.loadHistoricalData(getContext());
-                }
-                cursor.setNotificationUri(getContext().getContentResolver(), uri);
-                return cursor;
+                return createWeatherHistoryQuery(uri, selection, selectionArgs, db, sortOrder);
             }
             default: {
                 throw new UnsupportedOperationException("Unknown uri " + uri);
             }
         }
+    }
+
+    private Cursor createWeatherHistoryQuery(Uri uri, String selection, String[] selectionArgs, SQLiteDatabase db, String sortOrder) {
+        Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, sortOrder);
+        Log.i(LOG_TAG, "cursor.getCount:" + cursor.getCount());
+        if (cursor.getCount() <= 1) {
+            WeatherHistoryServiceHelper.loadHistoricalData(getContext());
+        }
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
+    }
+
+    private Cursor createWeatherStationQuery(Uri uri, String selection, String[] selectionArgs, SQLiteDatabase db) {
+        Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
+    }
+
+    @NonNull
+    private Cursor createWeatherDataQuery(Uri uri, String selection, String[] selectionArgs, SQLiteDatabase db) {
+        Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
+        if (!cursor.moveToFirst()) {
+            WeatherHistoryServiceHelper.loadCurrentForecast(getContext());
+        }
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
     }
 
     @Override

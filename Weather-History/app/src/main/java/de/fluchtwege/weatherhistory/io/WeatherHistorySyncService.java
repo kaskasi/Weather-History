@@ -19,12 +19,11 @@ public class WeatherHistorySyncService extends IntentService {
 		int serviceToCall = intent.getIntExtra(SERVICE_TO_CALL, -1);
 		switch (serviceToCall) {
 		case Messages.INTENT_FORECAST: {
-			new ForecastHandler(this);
+			new ForecastHandler(this).enqueueRequests();
 			break;
 		}
 		case Messages.INTENT_HISTORY: {
-			Bundle parameters = intent.getBundleExtra(Messages.PARAMETERS);
-			new BatchHistoryHandler(this);
+			new BatchHistoryHandler(this).enqueueRequests();
 			break;
 		}
 		default: {

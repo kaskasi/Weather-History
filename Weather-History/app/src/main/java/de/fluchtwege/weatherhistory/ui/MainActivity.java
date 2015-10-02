@@ -28,69 +28,83 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         setSupportActionBar(toolbar);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         if (tabLayout != null) {
-            tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.current_header)));
-            tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.station_header)));
-            tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.history_header)));
-            tabLayout.setOnTabSelectedListener(this);
-            onTabSelected(tabLayout.getTabAt(0));
+            initializeTabLayout(tabLayout);
         }
+    }
 
+    private void initializeTabLayout(TabLayout tabLayout) {
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.current_header)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.station_header)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.history_header)));
+        tabLayout.setOnTabSelectedListener(this);
+        onTabSelected(tabLayout.getTabAt(0));
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (tab.getText().equals(getString(R.string.station_header))) {
-            currentWeatherFragment = (CurrentWeatherFragment) getSupportFragmentManager().findFragmentByTag(TAG_CURRENT);
-            if (currentWeatherFragment != null && !currentWeatherFragment.isDetached()) {
-                ft.hide(currentWeatherFragment);
-            }
-            historyFragment = (HistoryFragment) getSupportFragmentManager().findFragmentByTag(TAG_HISTORY);
-            if (historyFragment != null && !historyFragment.isDetached()) {
-                ft.hide(historyFragment);
-            }
-            stationFragment = (StationFragment) getSupportFragmentManager().findFragmentByTag(TAG_STATION);
-            if (stationFragment != null && !stationFragment.isDetached()) {
-                ft.show(stationFragment);
-            } else {
-                stationFragment = new StationFragment();
-                ft.add(R.id.tab_container, stationFragment, TAG_STATION);
-            }
-
+            onStationTabSelected(ft);
         } else if (tab.getText().equals(getString(R.string.current_header))) {
-            stationFragment = (StationFragment) getSupportFragmentManager().findFragmentByTag(TAG_STATION);
-            if (stationFragment != null && !stationFragment.isDetached()) {
-                ft.hide(stationFragment);
-            }
-            historyFragment = (HistoryFragment) getSupportFragmentManager().findFragmentByTag(TAG_HISTORY);
-            if (historyFragment != null && !historyFragment.isDetached()) {
-                ft.hide(historyFragment);
-            }
-            currentWeatherFragment = (CurrentWeatherFragment) getSupportFragmentManager().findFragmentByTag(TAG_CURRENT);
-            if (currentWeatherFragment != null && !currentWeatherFragment.isDetached()) {
-                ft.show(currentWeatherFragment);
-            } else {
-                currentWeatherFragment = new CurrentWeatherFragment();
-                ft.add(R.id.tab_container, currentWeatherFragment, TAG_CURRENT);
-            }
+            onCurrentWeatherTabSelected(ft);
         } else if (tab.getText().equals(getString(R.string.history_header))) {
-            stationFragment = (StationFragment) getSupportFragmentManager().findFragmentByTag(TAG_STATION);
-            if (stationFragment != null && !stationFragment.isDetached()) {
-                ft.hide(stationFragment);
-            }
-            currentWeatherFragment = (CurrentWeatherFragment) getSupportFragmentManager().findFragmentByTag(TAG_CURRENT);
-            if (currentWeatherFragment != null && !currentWeatherFragment.isDetached()) {
-                ft.hide(currentWeatherFragment);
-            }
-            historyFragment = (HistoryFragment) getSupportFragmentManager().findFragmentByTag(TAG_HISTORY);
-            if (historyFragment != null && !historyFragment.isDetached()) {
-                ft.show(historyFragment);
-            } else {
-                historyFragment = new HistoryFragment();
-                ft.add(R.id.tab_container, historyFragment, TAG_HISTORY);
-            }
+            onHistoryTabSelected(ft);
         }
         ft.commit();
+    }
+
+    private void onHistoryTabSelected(FragmentTransaction ft) {
+        stationFragment = (StationFragment) getSupportFragmentManager().findFragmentByTag(TAG_STATION);
+        if (stationFragment != null && !stationFragment.isDetached()) {
+            ft.hide(stationFragment);
+        }
+        currentWeatherFragment = (CurrentWeatherFragment) getSupportFragmentManager().findFragmentByTag(TAG_CURRENT);
+        if (currentWeatherFragment != null && !currentWeatherFragment.isDetached()) {
+            ft.hide(currentWeatherFragment);
+        }
+        historyFragment = (HistoryFragment) getSupportFragmentManager().findFragmentByTag(TAG_HISTORY);
+        if (historyFragment != null && !historyFragment.isDetached()) {
+            ft.show(historyFragment);
+        } else {
+            historyFragment = new HistoryFragment();
+            ft.add(R.id.tab_container, historyFragment, TAG_HISTORY);
+        }
+    }
+
+    private void onCurrentWeatherTabSelected(FragmentTransaction ft) {
+        stationFragment = (StationFragment) getSupportFragmentManager().findFragmentByTag(TAG_STATION);
+        if (stationFragment != null && !stationFragment.isDetached()) {
+            ft.hide(stationFragment);
+        }
+        historyFragment = (HistoryFragment) getSupportFragmentManager().findFragmentByTag(TAG_HISTORY);
+        if (historyFragment != null && !historyFragment.isDetached()) {
+            ft.hide(historyFragment);
+        }
+        currentWeatherFragment = (CurrentWeatherFragment) getSupportFragmentManager().findFragmentByTag(TAG_CURRENT);
+        if (currentWeatherFragment != null && !currentWeatherFragment.isDetached()) {
+            ft.show(currentWeatherFragment);
+        } else {
+            currentWeatherFragment = new CurrentWeatherFragment();
+            ft.add(R.id.tab_container, currentWeatherFragment, TAG_CURRENT);
+        }
+    }
+
+    private void onStationTabSelected(FragmentTransaction ft) {
+        currentWeatherFragment = (CurrentWeatherFragment) getSupportFragmentManager().findFragmentByTag(TAG_CURRENT);
+        if (currentWeatherFragment != null && !currentWeatherFragment.isDetached()) {
+            ft.hide(currentWeatherFragment);
+        }
+        historyFragment = (HistoryFragment) getSupportFragmentManager().findFragmentByTag(TAG_HISTORY);
+        if (historyFragment != null && !historyFragment.isDetached()) {
+            ft.hide(historyFragment);
+        }
+        stationFragment = (StationFragment) getSupportFragmentManager().findFragmentByTag(TAG_STATION);
+        if (stationFragment != null && !stationFragment.isDetached()) {
+            ft.show(stationFragment);
+        } else {
+            stationFragment = new StationFragment();
+            ft.add(R.id.tab_container, stationFragment, TAG_STATION);
+        }
     }
 
     @Override

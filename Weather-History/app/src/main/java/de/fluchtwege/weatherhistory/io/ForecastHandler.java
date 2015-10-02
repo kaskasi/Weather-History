@@ -49,17 +49,14 @@ public class ForecastHandler extends BaseHandler {
 
     public ForecastHandler(Context ctx) {
         super(ctx);
-        Log.d(LOG_TAG, "Constructor");
-        handle();
     }
-
 
     @Override
     public void onResponse(JSONObject object) {
         Log.d(LOG_TAG, "onResponse");
         final ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
         batch.add(parseForecast(object));
-        final ContentResolver resolver = mCtx.getContentResolver();
+        final ContentResolver resolver = context.getContentResolver();
         try {
             resolver.applyBatch(WeatherHistoryContract.CONTENT_AUTHORITY, batch);
         } catch (RemoteException e) {
