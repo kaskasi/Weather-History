@@ -5,6 +5,11 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="AppTheme.TabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">#FF0000</item>"
+
+    </style>
+
     <style name="AppTheme.View"></style>
 
     <style name="AppTheme.View.TextView">

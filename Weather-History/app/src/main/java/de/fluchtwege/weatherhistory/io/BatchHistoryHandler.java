@@ -24,13 +24,15 @@ import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 
 public class BatchHistoryHandler extends BaseHandler {
 
+
+    private static final String LOG_TAG = "WHBaseHandler";
+
     private static final String TAG_HISTORY = "history";
     private static final String TAG_DAILY_SUMMARY = "dailysummary";
     private static final String TAG_MAX_TEMP = "maxtempm";
     private static final String TAG_MIN_TEMP = "mintempm";
     private static final String DATE = "[DATE]";
     private static final String BASE_URL = "http://api.wunderground.com/api/56b55db73f36509e/history_[DATE]/q/DE/EDXH.json";
-    private static final String LOG_TAG = "WeatherHistory.HistoryHandler";
     private static final String TAG_DATE = "date";
     private static final String TAG_MDAY = "mday";
     private static final String TAG_MON = "mon";

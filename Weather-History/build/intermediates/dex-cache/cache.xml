@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/jankettner/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3.1/ecb6e1f8e4b0e84c4b886c2f14a1500caf309757/gson-2.3.1.jar"
+        jumboMode="false"
+        revision="21.0.1"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/gson-2.3.1-140222cb4fe0aca7f5554f47c2e9a5f4c8953d9a.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3.1/ecb6e1f8e4b0e84c4b886c2f14a1500caf309757/gson-2.3.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/gson-2.3.1-140222cb4fe0aca7f5554f47c2e9a5f4c8953d9a.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="00b0b7233e1ec64acebfac40d4983d32d4712426">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/classes-943994813ceca4ddaddaacda89de17972751adeb.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/Weather-History/Weather-History/app/libs/volley.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="089ca8147c0216f1917d676855d3d3d9cac65cdd">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/volley-8800cfa1b71bc28693dcc4b6ab3f5614f1048f6e.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/classes-a16170a21b392382da8928f1607a47dc23347f0a.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/Weather-History/Weather-History/app/libs/volley.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="089ca8147c0216f1917d676855d3d3d9cac65cdd">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/volley-8800cfa1b71bc28693dcc4b6ab3f5614f1048f6e.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/classes-06fdcf6da6ef6361bc7aa4d5189913ad88d61001.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/Weather-History/Weather-History/app/libs/volley.jar"
+        jumboMode="false"
+        revision="21.0.1"
+        sha1="089ca8147c0216f1917d676855d3d3d9cac65cdd">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/volley-8800cfa1b71bc28693dcc4b6ab3f5614f1048f6e.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/Weather-History/Weather-History/app/libs/GraphView-3.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="fde5ac3b4d45761447598d87b4c43cc4d143890a">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/GraphView-3.1.1-53d15c1c9e7ec87dd448f8617b7682e452eac6a3.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/Weather-History/Weather-History/app/libs/GraphView-3.1.1.jar"
+        jumboMode="false"
+        revision="21.0.1"
+        sha1="fde5ac3b4d45761447598d87b4c43cc4d143890a">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/GraphView-3.1.1-53d15c1c9e7ec87dd448f8617b7682e452eac6a3.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/libs/internal_impl-23.0.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.1-b6dbcc36ac4d4d384368c0832f141d755078281b.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/Weather-History/Weather-History/app/libs/GraphView-3.1.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="fde5ac3b4d45761447598d87b4c43cc4d143890a">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/GraphView-3.1.1-53d15c1c9e7ec87dd448f8617b7682e452eac6a3.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/adt/extras/android/m2repository/com/android/support/support-annotations/23.0.1/support-annotations-23.0.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.1-daa05dc71fe846df586f76c3d7e26902983ac99a.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/exploded-aar/com.android.support/design/23.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="8a5238e4bdcd6568b82db669d41817de670586b8">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/classes-23762b3e4d3b0a77641a1e7d788548a648a57cd3.jar" />
+    </item>
+    <item
+        jar="/Users/jankettner/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3.1/ecb6e1f8e4b0e84c4b886c2f14a1500caf309757/gson-2.3.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="/Users/jankettner/Weather-History/Weather-History/app/build/intermediates/pre-dexed/debug/gson-2.3.1-140222cb4fe0aca7f5554f47c2e9a5f4c8953d9a.jar" />
+    </item>
+
+</items>

@@ -6,7 +6,7 @@ import android.util.Log;
 
 public class WeatherHistoryServiceHelper {
 
-    private static final String LOG_TAG = "WeatherHistoryServiceHelper";
+    private static final String LOG_TAG = "WHServiceHelper";
 
     public static void loadCurrentForecast(Context ctx) {
         Log.d(LOG_TAG, "loadCurrentForecast");

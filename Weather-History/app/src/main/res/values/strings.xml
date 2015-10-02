@@ -4,7 +4,7 @@
     <string name="app_name">Weather-History</string>
     <string name="history_header">Historische Wetterdaten</string>
     <string name="current_header">Aktuelle Wetterdaten</string>
-    <string name="station_header">Wetterstation</string>
+    <string name="station_header">Wetter Station</string>
 
     <string name="current_temp_label">Temperatur</string>
     <string name="current_windspeed_label">Windgeschwindigkeit</string>

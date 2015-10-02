@@ -7,9 +7,6 @@ import android.view.View;
 
 import com.android.volley.toolbox.NetworkImageView;
 
-/**
- * Created by jkettner on 21.02.14.
- */
 public class StretchedNetworkImageView extends NetworkImageView{
 
     public StretchedNetworkImageView(Context context) {
@@ -32,16 +29,10 @@ public class StretchedNetworkImageView extends NetworkImageView{
             int imgHeight = d.getIntrinsicHeight();
             int imgWidth = d.getIntrinsicWidth();
             if (imgHeight > 0 && imgWidth > 0) {
-                // if (ImageManager.noFile != null
-                // && ImageManager.noFile.getIntrinsicHeight() == imgHeight
-                // && ImageManager.noFile.getIntrinsicWidth() == imgWidth)
-                // if (d != ImageManager.noFile) { // don't stretch place holder
-                // // images
                 int width = MeasureSpec.getSize(widthMeasureSpec);
                 int height = (int) ((double) imgHeight * (double) width /
                 (double) imgWidth);
                 setMeasuredDimension(width, height);
-                // }
             }
         }
     }

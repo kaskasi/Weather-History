@@ -21,7 +21,7 @@ import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 
 public class ForecastHandler extends BaseHandler {
 
-    private static final String LOG_TAG = "WeatherHistory.ForecastHandler";
+    private static final String LOG_TAG = "WH.ForecastHandler";
 
     private static final String BASE_URL = "http://api.wunderground.com/api/56b55db73f36509e/geolookup/conditions/forecast/q/Germany/Helgoland.json";
 
