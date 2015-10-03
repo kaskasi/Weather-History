@@ -27,6 +27,8 @@ public class BatchHistoryHandler extends BaseHandler {
     //can only retrieve data of last 8 years due to free license for wundergroung
     public static final int MAX_YEARS_OF_AVAILABLE_DATA = 8;
 
+    public static final int START_YEAR_OF_AVAILABLE_DATA = 2013;
+
     private static final String LOG_TAG = "WHBaseHandler";
 
     private static final String TAG_HISTORY = "history";
@@ -52,7 +54,8 @@ public class BatchHistoryHandler extends BaseHandler {
     @Override
     public void enqueueRequests() {
         for (int i = 0; i < MAX_YEARS_OF_AVAILABLE_DATA; i++) {
-            String yearOfRequest = new StringBuilder("").append(2013 - i).append(Util.getDateForHistory()).toString();
+            String yearOfRequest = new StringBuilder("").append(START_YEAR_OF_AVAILABLE_DATA - i).
+                    append(Util.getDateForHistory()).toString();
             enqueueRequestUrl(createRequestUrl(yearOfRequest));
             numberOfCalls++;
         }
@@ -60,7 +63,7 @@ public class BatchHistoryHandler extends BaseHandler {
 
     private void enqueueRequestUrl(String requestUrl) {
         request = new JsonObjectRequest(getMethod(), requestUrl, null, this, this);
-        RequestQueue queue = Volley.newRequestQueue(context);
+        RequestQueue queue = VolleyController.getRequestQueue(context);
         queue.add(request);
     }
 

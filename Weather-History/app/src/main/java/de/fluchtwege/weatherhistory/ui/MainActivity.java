@@ -1,5 +1,6 @@
 package de.fluchtwege.weatherhistory.ui;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
@@ -19,6 +20,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
     private StationFragment stationFragment = null;
     private HistoryFragment historyFragment = null;
     private CurrentWeatherFragment currentWeatherFragment = null;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         setContentView(R.layout.activity_main);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         if (tabLayout != null) {
             initializeTabLayout(tabLayout);
         }
@@ -115,5 +117,9 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    public TabLayout getTabLayout() {
+        return tabLayout;
     }
 }
