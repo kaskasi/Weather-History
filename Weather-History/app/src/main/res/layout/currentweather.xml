@@ -136,7 +136,7 @@
                         android:id="@+id/current_humidity"
                         style="@style/AppTheme.View.TextView"
                         android:gravity="center_horizontal"
-                        android:text="100%" />
+                        android:text="77%" />
                 </TableRow>
             </TableLayout>
 

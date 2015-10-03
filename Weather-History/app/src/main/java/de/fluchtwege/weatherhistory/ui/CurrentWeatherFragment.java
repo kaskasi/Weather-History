@@ -14,10 +14,10 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 
 import de.fluchtwege.weatherhistory.R;
 import de.fluchtwege.weatherhistory.Util;
-import de.fluchtwege.weatherhistory.io.VolleyController;
 import de.fluchtwege.weatherhistory.provider.BitmapLruCache;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 
@@ -36,7 +36,6 @@ public class CurrentWeatherFragment extends BaseFragment  implements LoaderManag
     private NetworkImageView iconImage = null;
     private NetworkImageView webcamImage;
 
-    private Loader<Cursor> loader = null;
     private RequestQueue requestQueue = null;
     private ImageLoader imageLoader = null;
 
@@ -47,9 +46,9 @@ public class CurrentWeatherFragment extends BaseFragment  implements LoaderManag
             return root;
         }
         initializeViews(root);
-        loader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_ALL, null, this);
+        cursorLoader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_ALL, null, this);
 
-        requestQueue = VolleyController.getRequestQueue(getActivity());
+        requestQueue = Volley.newRequestQueue(getActivity());
         imageLoader = new ImageLoader(requestQueue, BitmapLruCache.getInstance());
         webcamImage.setImageUrl(WEB_CAM_URL, imageLoader);
         showProgress();
@@ -74,12 +73,12 @@ public class CurrentWeatherFragment extends BaseFragment  implements LoaderManag
             case WeatherHistoryContract.WeatherDataQuery._TOKEN_ALL: {
                 String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " = ?";
                 String[] selectionArgs = new String[]{"" + Util.getCurrentDateFormatted()};
-                loader = new CursorLoader(getActivity(), WeatherHistoryContract.WeatherData.buildRegistrationUri(),
+                cursorLoader = new CursorLoader(getActivity(), WeatherHistoryContract.WeatherData.buildRegistrationUri(),
                         WeatherHistoryContract.WeatherDataQuery.PROJECTION, selection, selectionArgs, null);
                 break;
             }
         }
-        return loader;
+        return cursorLoader;
     }
 
     @Override

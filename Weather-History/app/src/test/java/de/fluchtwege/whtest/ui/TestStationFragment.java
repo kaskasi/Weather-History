@@ -1,6 +1,8 @@
 package de.fluchtwege.whtest.ui;
 
+import android.database.Cursor;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.Loader;
 import android.widget.TextView;
 
 import junit.framework.Assert;
@@ -13,7 +15,9 @@ import org.robolectric.annotation.Config;
 
 import de.fluchtwege.weatherhistory.BuildConfig;
 import de.fluchtwege.weatherhistory.R;
+import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 import de.fluchtwege.whtest.BaseTest;
+import de.fluchtwege.whtest.mock.TestLoaderHandler;
 
 //these tests are failing
 @RunWith(RobolectricGradleTestRunner.class)
@@ -24,10 +28,13 @@ public class TestStationFragment extends BaseTest {
     @Before
     @Override
     public void setUp() throws Exception {
-        setDeviceType(TestDevice.LargeTablet);
         super.setUp();
+
         TabLayout.Tab stationTab = activity.getTabLayout().getTabAt(1);
         activity.onTabSelected(stationTab);
+
+        TestLoaderHandler handler = new TestLoaderHandler();
+        handler.waitForLoadFinished(activity.getStationFragment());
     }
 
     @Test

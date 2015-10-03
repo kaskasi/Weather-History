@@ -8,16 +8,14 @@ import android.util.DisplayMetrics;
 import org.junit.Before;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
-import org.robolectric.Shadows;
-import org.robolectric.internal.Shadow;
 import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowContentResolver;
 
-import de.fluchtwege.weatherhistory.io.VolleyController;
+import de.fluchtwege.weatherhistory.io.ServiceHelperController;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryContentProvider;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 import de.fluchtwege.weatherhistory.ui.MainActivity;
-import de.fluchtwege.whtest.mock.MockRequestQueue;
+import de.fluchtwege.whtest.mock.MockServiceHelper;
 
 /* Since it is not really possible to do TDD after the fact, I will create some POUT,
    to show which tests I would have created
@@ -46,8 +44,8 @@ public class BaseTest {
     public void setUp() throws Exception {
         setDisplayMetricsForDeviceType(deviceType);
 
-        MockRequestQueue queue = new MockRequestQueue();
-        VolleyController.setRequestQueue(queue);
+        MockServiceHelper serviceHelper = new MockServiceHelper();
+        ServiceHelperController.setServiceHelper(serviceHelper);
 
         setupShadowContentResolver();
 

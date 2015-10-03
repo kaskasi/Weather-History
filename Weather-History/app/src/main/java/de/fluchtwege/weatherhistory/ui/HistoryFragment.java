@@ -26,8 +26,6 @@ public class HistoryFragment extends BaseFragment implements LoaderManager.Loade
 
     private static final String LOG_TAG = "HistoryFragment";
 
-    private Loader<Cursor> loader = null;
-
     private LinearLayout graphContainer = null;
     private GraphView.GraphViewData[] temperatureMaximums = null;
     private GraphView.GraphViewData[] temperatureMinimums = null;
@@ -53,7 +51,7 @@ public class HistoryFragment extends BaseFragment implements LoaderManager.Loade
             return root;
         }
         graphContainer = (LinearLayout) root.findViewById(R.id.graph_container);
-        loader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_HISTORY, null,
+        cursorLoader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_HISTORY, null,
                 this);
         showProgress();
         return root;
@@ -67,12 +65,12 @@ public class HistoryFragment extends BaseFragment implements LoaderManager.Loade
                 String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " LIKE ?";
                 String[] selectionArgs = new String[]{"%" + Util.getDateForHistory()};
                 String sortOrder = WeatherHistoryContract.WeatherDataColumns.DATE;
-                loader = new CursorLoader(getActivity(), WeatherHistoryContract.WeatherHistory.buildRegistrationUri(),
+                cursorLoader = new CursorLoader(getActivity(), WeatherHistoryContract.WeatherHistory.buildRegistrationUri(),
                         WeatherHistoryContract.WeatherDataQuery.PROJECTION, selection, selectionArgs, sortOrder);
                 break;
             }
         }
-        return loader;
+        return cursorLoader;
     }
 
     @Override

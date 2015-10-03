@@ -1,7 +1,9 @@
 package de.fluchtwege.weatherhistory.ui;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import de.fluchtwege.weatherhistory.R;
 public abstract class BaseFragment extends Fragment {
 
     private View mProgressRL = null;
+
+    protected Loader<Cursor> cursorLoader = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +44,14 @@ public abstract class BaseFragment extends Fragment {
 
     public void hideProgress(){
         mProgressRL.setVisibility(RelativeLayout.INVISIBLE);
+    }
+
+    public Loader<Cursor> getCursorLoader() {
+        return cursorLoader;
+    }
+
+    public boolean isShowingProgress() {
+        return mProgressRL.getVisibility() == RelativeLayout.VISIBLE;
     }
 
 

@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
-
 import de.fluchtwege.weatherhistory.R;
 import de.fluchtwege.weatherhistory.Util;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
@@ -26,8 +24,6 @@ public class StationFragment extends BaseFragment implements LoaderManager.Loade
     private TextView longitudeText;
     private TextView latitudeText;
 
-    private Loader<Cursor> mLoader = null;
-
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.weatherstation, container, false);
         if (getActivity().isFinishing()) {
@@ -35,7 +31,7 @@ public class StationFragment extends BaseFragment implements LoaderManager.Loade
         }
         initializeViews(root);
 
-        mLoader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_STATION, null,
+        cursorLoader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_STATION, null,
                 this);
         showProgress();
         return root;
@@ -54,12 +50,12 @@ public class StationFragment extends BaseFragment implements LoaderManager.Loade
             case WeatherHistoryContract.WeatherDataQuery._TOKEN_STATION: {
                 String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " = ?";
                 String[] selectionArgs = new String[]{"" + Util.getCurrentDateFormatted()};
-                mLoader = new CursorLoader(getActivity(), WeatherHistoryContract.WeatherStation.buildRegistrationUri(),
+                cursorLoader = new CursorLoader(getActivity(), WeatherHistoryContract.WeatherStation.buildRegistrationUri(),
                         WeatherHistoryContract.WeatherDataQuery.PROJECTION_STATION, selection, selectionArgs, null);
                 break;
             }
         }
-        return mLoader;
+        return cursorLoader;
     }
 
     @Override

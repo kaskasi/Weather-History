@@ -67,6 +67,7 @@ public class ForecastHandler extends BaseHandler {
     }
 
     private ContentProviderOperation parseForecast(JSONObject object) {
+        Log.i(LOG_TAG, "parseForecast "+ object.toString());
         int highCelsius = 0;
         int lowCelsius = 0;
         String lat = null;

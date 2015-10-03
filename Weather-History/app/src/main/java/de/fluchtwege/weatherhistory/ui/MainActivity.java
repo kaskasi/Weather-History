@@ -122,4 +122,12 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
     public TabLayout getTabLayout() {
         return tabLayout;
     }
+
+    public StationFragment getStationFragment() {
+        return stationFragment;
+    }
+
+    public CurrentWeatherFragment getCurrentWeatherFragment() {
+        return currentWeatherFragment;
+    }
 }
