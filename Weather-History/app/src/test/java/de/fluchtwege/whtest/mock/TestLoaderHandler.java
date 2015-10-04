@@ -19,7 +19,7 @@ public class TestLoaderHandler {
     public boolean waitForLoadFinished(BaseFragment fragment) {
         boolean loaderFinished = false;
         int counter = 0;
-        while (latch.getCount() > 0 && counter < 7500) {
+        while (latch.getCount() > 0 && counter < 2500) {
             try {
                 counter++;
                 if (!fragment.isShowingProgress()) {

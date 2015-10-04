@@ -18,6 +18,7 @@ import com.android.volley.toolbox.Volley;
 
 import de.fluchtwege.weatherhistory.R;
 import de.fluchtwege.weatherhistory.Util;
+import de.fluchtwege.weatherhistory.io.IOController;
 import de.fluchtwege.weatherhistory.provider.BitmapLruCache;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 
@@ -48,7 +49,7 @@ public class CurrentWeatherFragment extends BaseFragment  implements LoaderManag
         initializeViews(root);
         cursorLoader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_ALL, null, this);
 
-        requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue = IOController.getRequestQueue(getActivity());
         imageLoader = new ImageLoader(requestQueue, BitmapLruCache.getInstance());
         webcamImage.setImageUrl(WEB_CAM_URL, imageLoader);
         showProgress();

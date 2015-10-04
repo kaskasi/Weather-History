@@ -1,14 +1,11 @@
 package de.fluchtwege.weatherhistory.ui;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 
 import de.fluchtwege.weatherhistory.R;
-
 
 public class MainActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
 
@@ -28,7 +25,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         setContentView(R.layout.activity_main);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         if (tabLayout != null) {
             initializeTabLayout(tabLayout);
         }
@@ -110,24 +107,14 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
     }
 
     @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
+    public void onTabUnselected(TabLayout.Tab tab) {}
 
     @Override
-    public void onTabReselected(TabLayout.Tab tab) {
+    public void onTabReselected(TabLayout.Tab tab) {}
 
-    }
+    public StationFragment getStationFragment() {return stationFragment; }
 
-    public TabLayout getTabLayout() {
-        return tabLayout;
-    }
+    public CurrentWeatherFragment getCurrentWeatherFragment() { return currentWeatherFragment; }
 
-    public StationFragment getStationFragment() {
-        return stationFragment;
-    }
-
-    public CurrentWeatherFragment getCurrentWeatherFragment() {
-        return currentWeatherFragment;
-    }
+    public HistoryFragment getHistoryFragment() { return historyFragment; }
 }

@@ -11,10 +11,11 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowContentResolver;
 
-import de.fluchtwege.weatherhistory.io.ServiceHelperController;
+import de.fluchtwege.weatherhistory.io.IOController;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryContentProvider;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 import de.fluchtwege.weatherhistory.ui.MainActivity;
+import de.fluchtwege.whtest.mock.MockRequestQueue;
 import de.fluchtwege.whtest.mock.MockServiceHelper;
 
 /* Since it is not really possible to do TDD after the fact, I will create some POUT,
@@ -28,41 +29,35 @@ public class BaseTest {
     private static final int LARGE_TABLET_HEIGHT = 4048;
 
     protected MainActivity activity;
-    private WeatherHistoryContentProvider mProvider;
-    private ContentResolver mContentResolver;
-    private ShadowContentResolver mShadowContentResolver;
-
-    public enum TestDevice {
-        LargeTablet,
-        LargePhone
-    }
-
-
     private TestDevice deviceType = TestDevice.LargePhone;
 
     @Before
     public void setUp() throws Exception {
         setDisplayMetricsForDeviceType(deviceType);
 
-        MockServiceHelper serviceHelper = new MockServiceHelper();
-        ServiceHelperController.setServiceHelper(serviceHelper);
-
+        setupIOController();
         setupShadowContentResolver();
 
         activity = Robolectric.setupActivity(MainActivity.class);
     }
-
-
 
     public void setDisplayMetricsForDeviceType(TestDevice testDeviceType) {
         DisplayMetrics displayMetrics = ShadowApplication.getInstance().getResources().getDisplayMetrics();
         if (testDeviceType == TestDevice.LargePhone) {
             displayMetrics.widthPixels = LARGE_PHONE_WIDTH;
             displayMetrics.heightPixels = LARGE_PHONE_HEIGHT;
-        } else if (testDeviceType == TestDevice.LargeTablet){
+        } else if (testDeviceType == TestDevice.LargeTablet) {
             displayMetrics.widthPixels = LARGE_TABLET_WIDTH;
             displayMetrics.heightPixels = LARGE_TABLET_HEIGHT;
         }
+    }
+
+    private void setupIOController() {
+        MockServiceHelper serviceHelper = new MockServiceHelper();
+        IOController.setServiceHelper(serviceHelper);
+
+        MockRequestQueue requestQueue = new MockRequestQueue();
+        IOController.setRequestQueue(requestQueue);
     }
 
     private void setupShadowContentResolver() {
@@ -74,8 +69,13 @@ public class BaseTest {
         ShadowContentResolver.registerProvider(WeatherHistoryContract.CONTENT_AUTHORITY, contentProvider);
     }
 
-
     public void setDeviceType(TestDevice deviceType) {
         this.deviceType = deviceType;
+    }
+
+
+    public enum TestDevice {
+        LargeTablet,
+        LargePhone
     }
 }

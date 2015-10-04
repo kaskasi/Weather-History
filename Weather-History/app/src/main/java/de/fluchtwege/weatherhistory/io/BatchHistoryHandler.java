@@ -63,7 +63,7 @@ public class BatchHistoryHandler extends BaseHandler {
 
     private void enqueueRequestUrl(String requestUrl) {
         request = new JsonObjectRequest(getMethod(), requestUrl, null, this, this);
-        RequestQueue queue = Volley.newRequestQueue(context);
+        RequestQueue queue = IOController.getRequestQueue(context);
         queue.add(request);
     }
 

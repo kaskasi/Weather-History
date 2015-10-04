@@ -25,7 +25,7 @@ public abstract class BaseHandler implements Listener<JSONObject>, ErrorListener
 
 	public void enqueueRequests() {
 		request = new JsonObjectRequest(getMethod(), getUrl(), null, this, this);
-		RequestQueue queue = Volley.newRequestQueue(context);
+		RequestQueue queue = IOController.getRequestQueue(context);
 		queue.add(request);
 	}
 

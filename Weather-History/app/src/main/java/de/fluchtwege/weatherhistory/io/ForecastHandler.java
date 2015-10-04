@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import de.fluchtwege.weatherhistory.Util;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 
+//This is my style of code from early 2014
 public class ForecastHandler extends BaseHandler {
 
     private static final String LOG_TAG = "WH.ForecastHandler";

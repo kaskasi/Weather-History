@@ -11,8 +11,7 @@ import android.util.Log;
 
 import java.util.Arrays;
 
-import de.fluchtwege.weatherhistory.io.ServiceHelperController;
-import de.fluchtwege.weatherhistory.io.WeatherHistoryServiceHelper;
+import de.fluchtwege.weatherhistory.io.IOController;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryDatabase.Tables;
 
 public class WeatherHistoryContentProvider extends ContentProvider {
@@ -124,7 +123,7 @@ public class WeatherHistoryContentProvider extends ContentProvider {
         Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, sortOrder);
         Log.i(LOG_TAG, "cursor.getCount:" + cursor.getCount());
         if (cursor.getCount() <= 1) {
-            ServiceHelperController.loadHistoricalData(getContext());
+            IOController.loadHistoricalData(getContext());
         }
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
@@ -140,7 +139,7 @@ public class WeatherHistoryContentProvider extends ContentProvider {
     private Cursor createWeatherDataQuery(Uri uri, String selection, String[] selectionArgs, SQLiteDatabase db) {
         Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
         if (!cursor.moveToFirst()) {
-            ServiceHelperController.loadCurrentForecast(getContext());
+            IOController.loadCurrentForecast(getContext());
         }
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;

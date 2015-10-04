@@ -6,7 +6,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -18,12 +17,6 @@ import de.fluchtwege.whtest.mock.TestLoaderHandler;
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class)
 public class TestCurrentWeatherFragment extends BaseTest {
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
-    }
 
     @Test
     public void Current_Weather_Fragment_Shows_Humidity() {
