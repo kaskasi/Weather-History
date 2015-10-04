@@ -13,7 +13,7 @@ import de.fluchtwege.weatherhistory.R;
 
 public abstract class BaseFragment extends Fragment {
 
-    private View progressContainer = null;
+    private RelativeLayout progressContainer = null;
 
     protected Loader<Cursor> cursorLoader = null;
 
@@ -22,7 +22,7 @@ public abstract class BaseFragment extends Fragment {
         RelativeLayout contentContainer = new RelativeLayout(getActivity());
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        progressContainer =  (View) inflater.inflate(R.layout.progress, container, false);
+        progressContainer = (RelativeLayout) inflater.inflate(R.layout.progress, container, false);
         progressContainer.setLayoutParams(params);
         View root = createView(inflater, container, savedInstanceState);
         root.setLayoutParams(params);
@@ -35,12 +35,17 @@ public abstract class BaseFragment extends Fragment {
 
     public abstract View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 
-    public void showProgress(){
+    public void showProgress() {
         progressContainer.setVisibility(RelativeLayout.VISIBLE);
     }
 
-    public void hideProgress(){
-        progressContainer.setVisibility(RelativeLayout.INVISIBLE);
+    public void hideProgress() {
+        progressContainer.post(new Runnable() {
+            @Override
+            public void run() {
+                progressContainer.setVisibility(View.GONE);
+            }
+        });
     }
 
     public Loader<Cursor> getCursorLoader() {
@@ -50,7 +55,6 @@ public abstract class BaseFragment extends Fragment {
     public boolean isShowingProgress() {
         return progressContainer.getVisibility() == RelativeLayout.VISIBLE;
     }
-
 
 
 }

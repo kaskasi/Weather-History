@@ -32,11 +32,6 @@ public class TestWHSyncService extends BaseTest {
         requestQueue.clearQueue();
     }
 
-    @Test
-    public void A_Service_Is_Registered_For_Service_Intent() {
-
-    }
-
     //Since Robolectric only works with Shadows, no Service can be started by an Intent
     @Test
     public void SyncService_Called_With_Forecast_Intent_Creates_Forecast_Handler() {

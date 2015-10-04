@@ -10,8 +10,12 @@ import de.fluchtwege.weatherhistory.io.ServiceHelper;
 
 public class MockServiceHelper implements ServiceHelper {
 
+    private boolean blockRequests = false;
+
     @Override
     public void loadCurrentForecast(Context ctx) {
+        if (blockRequests) { return; }
+
         ForecastHandler handler = new ForecastHandler(ctx);
         JSONObject jsonResonse = null;
         try {
@@ -25,5 +29,9 @@ public class MockServiceHelper implements ServiceHelper {
     @Override
     public void loadHistoricalData(Context ctx) {
 
+    }
+
+    public void setBlockRequests(boolean blockRequests) {
+        this.blockRequests = blockRequests;
     }
 }

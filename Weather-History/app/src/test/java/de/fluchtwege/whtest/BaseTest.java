@@ -12,6 +12,7 @@ import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowContentResolver;
 
 import de.fluchtwege.weatherhistory.io.IOController;
+import de.fluchtwege.weatherhistory.provider.Otto;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryContentProvider;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 import de.fluchtwege.weatherhistory.ui.MainActivity;
@@ -31,6 +32,7 @@ public class BaseTest {
     protected MainActivity activity;
     private TestDevice deviceType = TestDevice.LargePhone;
     protected WeatherHistoryContentProvider contentProvider;
+    protected MockServiceHelper serviceHelper;
 
     @Before
     public void setUp() throws Exception {
@@ -54,7 +56,9 @@ public class BaseTest {
     }
 
     private void setupIOController() {
-        MockServiceHelper serviceHelper = new MockServiceHelper();
+        if (serviceHelper == null) {
+            serviceHelper = new MockServiceHelper();
+        }
         IOController.setServiceHelper(serviceHelper);
 
         MockRequestQueue requestQueue = new MockRequestQueue();
@@ -66,7 +70,6 @@ public class BaseTest {
         ProviderInfo providerInfo = new ProviderInfo();
         providerInfo.authority = WeatherHistoryContract.CONTENT_AUTHORITY;
         contentProvider.attachInfo(RuntimeEnvironment.application, providerInfo);
-        contentProvider.onCreate();
         ShadowContentResolver.registerProvider(WeatherHistoryContract.CONTENT_AUTHORITY, contentProvider);
     }
 

@@ -16,7 +16,6 @@ import de.fluchtwege.weatherhistory.R;
 import de.fluchtwege.whtest.BaseTest;
 import de.fluchtwege.whtest.mock.TestLoaderHandler;
 
-//these tests are failing
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class)
 public class TestStationFragment extends BaseTest {
@@ -52,14 +51,14 @@ public class TestStationFragment extends BaseTest {
     public void Station_Fragment_Shows_Longitude_Of_Station() {
         TextView longitude = (TextView) activity.findViewById(R.id.station_lon);
         String longitudeValue = longitude.getText().toString();
-        Assert.assertEquals("54.18", longitudeValue);
+        Assert.assertEquals("7.9000001", longitudeValue);
     }
 
     @Test
     public void Station_Fragment_Shows_Latitude_Of_Station() {
         TextView latitude = (TextView) activity.findViewById(R.id.station_lat);
         String latitudeValue = latitude.getText().toString();
-        Assert.assertEquals("7.9", latitudeValue);
+        Assert.assertEquals("54.18000031", latitudeValue);
     }
 
 }

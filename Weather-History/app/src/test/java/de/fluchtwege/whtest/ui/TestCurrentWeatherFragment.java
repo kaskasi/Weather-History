@@ -25,14 +25,14 @@ public class TestCurrentWeatherFragment extends BaseTest {
 
         TextView humidity = (TextView) activity.findViewById(R.id.current_humidity);
         String humidityValue = humidity.getText().toString();
-        Assert.assertEquals("100%", humidityValue);
+        Assert.assertEquals("74%", humidityValue);
     }
 
     @Test
     public void Current_Weather_Fragment_Shows_Visibility() {
         TextView visibility = (TextView) activity.findViewById(R.id.current_visibility);
         String visibilityValue = visibility.getText().toString();
-        Assert.assertEquals("8", visibilityValue);
+        Assert.assertEquals("9", visibilityValue);
     }
 
     @Test
@@ -46,20 +46,20 @@ public class TestCurrentWeatherFragment extends BaseTest {
     public void Current_Weather_Fragment_Shows_WindSpeed() {
         TextView windSpeed = (TextView) activity.findViewById(R.id.current_windspeed);
         String windSpeedValue = windSpeed.getText().toString();
-        Assert.assertEquals("11", windSpeedValue);
+        Assert.assertEquals("29", windSpeedValue);
     }
 
     @Test
     public void Current_Weather_Fragment_Shows_WindDirection() {
         TextView windDirection = (TextView) activity.findViewById(R.id.current_winddir);
         String windDirectionValue = windDirection.getText().toString();
-        Assert.assertEquals("EAST", windDirectionValue);
+        Assert.assertEquals("ESE", windDirectionValue);
     }
 
     @Test
     public void Current_Weather_Fragment_Shows_FeelsLikeTemperature() {
         TextView feelsLike = (TextView) activity.findViewById(R.id.current_feelslike);
         String feelsLikeValue = feelsLike.getText().toString();
-        Assert.assertEquals("10", feelsLikeValue);
+        Assert.assertEquals("16", feelsLikeValue);
     }
 }

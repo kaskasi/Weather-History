@@ -29,6 +29,7 @@ public class TestMainActivity extends BaseTest {
         Assert.assertEquals(TabLayout.VISIBLE, tabLayout.getVisibility());
     }
 
+    //TODO: failing - need to call measure in BaseTest, else deviceType is ignored
     @Test
     public void On_Tablet_MainActivity_Will_Not_Show_TabLayout() {
         setDeviceType(TestDevice.LargeTablet);

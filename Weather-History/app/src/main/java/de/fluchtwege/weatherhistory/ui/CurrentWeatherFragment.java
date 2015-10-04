@@ -15,14 +15,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.squareup.otto.Subscribe;
 
 import de.fluchtwege.weatherhistory.R;
 import de.fluchtwege.weatherhistory.Util;
 import de.fluchtwege.weatherhistory.io.IOController;
+import de.fluchtwege.weatherhistory.model.CurrentWeather;
 import de.fluchtwege.weatherhistory.provider.BitmapLruCache;
+import de.fluchtwege.weatherhistory.provider.Otto;
 import de.fluchtwege.weatherhistory.provider.WeatherHistoryContract;
 
-public class CurrentWeatherFragment extends BaseFragment  implements LoaderManager.LoaderCallbacks<Cursor> {
+public class CurrentWeatherFragment extends BaseFragment {
 
     private static final String LOG_TAG = "CurrentWeatherFragment";
 
@@ -47,14 +50,20 @@ public class CurrentWeatherFragment extends BaseFragment  implements LoaderManag
             return root;
         }
         initializeViews(root);
-        cursorLoader = getActivity().getSupportLoaderManager().restartLoader(WeatherHistoryContract.WeatherDataQuery._TOKEN_ALL, null, this);
+        initializeNetworkImageView(root);
 
+        Otto.getBus().register(this);
+        Otto.getBus().post(createLoader());
+
+        showProgress();
+        return root;
+    }
+
+    private void initializeNetworkImageView(ViewGroup root) {
+        webcamImage = (NetworkImageView) root.findViewById(R.id.webcam_image);
         requestQueue = IOController.getRequestQueue(getActivity());
         imageLoader = new ImageLoader(requestQueue, BitmapLruCache.getInstance());
         webcamImage.setImageUrl(WEB_CAM_URL, imageLoader);
-        showProgress();
-
-        return root;
     }
 
     private void initializeViews(ViewGroup root) {
@@ -65,76 +74,31 @@ public class CurrentWeatherFragment extends BaseFragment  implements LoaderManag
         humidityText = (TextView) root.findViewById(R.id.current_humidity);
         visibilityText = (TextView) root.findViewById(R.id.current_visibility);
         iconImage = (NetworkImageView) root.findViewById(R.id.current_image);
-        webcamImage = (NetworkImageView) root.findViewById(R.id.webcam_image);
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-        switch (id) {
-            case WeatherHistoryContract.WeatherDataQuery._TOKEN_ALL: {
-                String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " = ?";
-                String[] selectionArgs = new String[]{"" + Util.getCurrentDateFormatted()};
-                cursorLoader = new CursorLoader(getActivity(), WeatherHistoryContract.WeatherData.buildRegistrationUri(),
-                        WeatherHistoryContract.WeatherDataQuery.PROJECTION, selection, selectionArgs, null);
-                break;
-            }
-        }
+    public CursorLoader createLoader() {
+        String selection = WeatherHistoryContract.WeatherDataColumns.DATE + " = ?";
+        String[] selectionArgs = new String[]{"" + Util.getCurrentDateFormatted()};
+        CursorLoader cursorLoader = new CursorLoader(getActivity(), WeatherHistoryContract.WeatherData.buildRegistrationUri(),
+                WeatherHistoryContract.WeatherDataQuery.PROJECTION, selection, selectionArgs, null);
         return cursorLoader;
     }
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        Log.i(LOG_TAG, "onLoadFinished id=" + loader.getId());
-        switch (loader.getId()) {
-            case WeatherHistoryContract.WeatherDataQuery._TOKEN_ALL:  {
-                if (cursor.moveToFirst()) {
-                    bindDataToViews(cursor);
-                    hideProgress();
-                }
-                break;
-            }
-        }
+    @Subscribe
+    public void subscribe(CurrentWeather currentWeather) {
+        bindDataToViews(currentWeather);
+        hideProgress();
     }
 
-    private void bindDataToViews(Cursor cursor) {
-        windSpeedText.setText(parseWindSpeed(cursor));
-        windDirText.setText(parseWindDir(cursor));
-        feelsLikeTemperatureTV.setText(parseFeelsLikeTemperature(cursor));
-        visibilityText.setText(parseVisibility(cursor));
-        humidityText.setText(parseHumidity(cursor));
-        temperatureText.setText(parseTemperature(cursor) + " °C");
-        iconImage.setImageUrl(parseIconUrl(cursor), imageLoader);
+    private void bindDataToViews(CurrentWeather currentWeather) {
+        windSpeedText.setText(currentWeather.getWindSpeed());
+        windDirText.setText(currentWeather.getWindDirection());
+        feelsLikeTemperatureTV.setText(currentWeather.getFeelsLikeTemp());
+        visibilityText.setText(currentWeather.getVisibility());
+        humidityText.setText(currentWeather.getHumidity());
+        temperatureText.setText(currentWeather.getTemperature() + " °C");
+        iconImage.setImageUrl(currentWeather.getIconURL(), imageLoader);
     }
 
-    private String parseHumidity(Cursor cursor) {
-        return cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.RELATIVE_HUMIDITY));
-    }
 
-    private String parseTemperature(Cursor cursor) {
-        return cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.TEMP_C));
-    }
-
-    private String parseVisibility(Cursor cursor) {
-        return cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.VISIBILITY_KM));
-    }
-
-    private String parseIconUrl(Cursor cursor) {
-        return cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.ICON_URL));
-    }
-
-    private String parseFeelsLikeTemperature(Cursor cursor) {
-        return cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.FEELSLIKE_C));
-    }
-
-    private String parseWindSpeed(Cursor cursor) {
-        return cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.WIND_KPH));
-    }
-
-    private String parseWindDir(Cursor cursor) {
-        return cursor.getString(cursor.getColumnIndex(WeatherHistoryContract.WeatherDataColumns.WIND_DIR));
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> arg0) {
-    }
 }

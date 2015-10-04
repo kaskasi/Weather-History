@@ -7,7 +7,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.content.CursorLoader;
 import android.util.Log;
+
+import com.squareup.otto.Subscribe;
 
 import java.util.Arrays;
 
@@ -37,6 +40,7 @@ public class WeatherHistoryContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         database = new WeatherHistoryDatabase(getContext());
+        Otto.getBus().register(this);
         return true;
     }
 
@@ -92,8 +96,15 @@ public class WeatherHistoryContentProvider extends ContentProvider {
         } else {
             db.insert(Tables.WEATHER_DATA, null, values);
         }
+        ContentProviderHelper.postCurrentWeather(values);
+
         cursor.close();
         getContext().getContentResolver().notifyChange(uri, null);
+    }
+
+    @Subscribe
+    public void subscribe(CursorLoader loader) {
+        query(loader.getUri(), loader.getProjection(), loader.getSelection(), loader.getSelectionArgs(), loader.getSortOrder());
     }
 
     @Override
@@ -131,7 +142,11 @@ public class WeatherHistoryContentProvider extends ContentProvider {
 
     private Cursor createWeatherStationQuery(Uri uri, String selection, String[] selectionArgs, SQLiteDatabase db) {
         Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        if (!cursor.moveToFirst()) {
+            IOController.loadCurrentForecast(getContext());
+        } else {
+            ContentProviderHelper.parseAndPostStation(cursor);
+        }
         return cursor;
     }
 
@@ -140,8 +155,9 @@ public class WeatherHistoryContentProvider extends ContentProvider {
         Cursor cursor = db.query(Tables.WEATHER_DATA, null, selection, selectionArgs, null, null, null);
         if (!cursor.moveToFirst()) {
             IOController.loadCurrentForecast(getContext());
+        } else {
+            ContentProviderHelper.parseAndPostWeatherData(cursor);
         }
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
