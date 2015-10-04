@@ -30,6 +30,7 @@ public class BaseTest {
 
     protected MainActivity activity;
     private TestDevice deviceType = TestDevice.LargePhone;
+    protected WeatherHistoryContentProvider contentProvider;
 
     @Before
     public void setUp() throws Exception {
@@ -61,7 +62,7 @@ public class BaseTest {
     }
 
     private void setupShadowContentResolver() {
-        final ContentProvider contentProvider = new WeatherHistoryContentProvider();
+        contentProvider = new WeatherHistoryContentProvider();
         ProviderInfo providerInfo = new ProviderInfo();
         providerInfo.authority = WeatherHistoryContract.CONTENT_AUTHORITY;
         contentProvider.attachInfo(RuntimeEnvironment.application, providerInfo);

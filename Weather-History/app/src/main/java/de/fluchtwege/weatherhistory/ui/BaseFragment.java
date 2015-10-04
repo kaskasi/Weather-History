@@ -11,39 +11,36 @@ import android.widget.RelativeLayout;
 
 import de.fluchtwege.weatherhistory.R;
 
-/**
- * Created by jkettner on 20.02.14.
- */
 public abstract class BaseFragment extends Fragment {
 
-    private View mProgressRL = null;
+    private View progressContainer = null;
 
     protected Loader<Cursor> cursorLoader = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RelativeLayout containerRL = new RelativeLayout(getActivity());
+        RelativeLayout contentContainer = new RelativeLayout(getActivity());
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        mProgressRL =  (View) inflater.inflate(R.layout.progress, container, false);
-        mProgressRL.setLayoutParams(params);
+        progressContainer =  (View) inflater.inflate(R.layout.progress, container, false);
+        progressContainer.setLayoutParams(params);
         View root = createView(inflater, container, savedInstanceState);
         root.setLayoutParams(params);
-        containerRL.addView(root);
+        contentContainer.addView(root);
 
-        containerRL.addView(mProgressRL);
-        return containerRL;
+        contentContainer.addView(progressContainer);
+        return contentContainer;
     }
 
 
     public abstract View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 
     public void showProgress(){
-        mProgressRL.setVisibility(RelativeLayout.VISIBLE);
+        progressContainer.setVisibility(RelativeLayout.VISIBLE);
     }
 
     public void hideProgress(){
-        mProgressRL.setVisibility(RelativeLayout.INVISIBLE);
+        progressContainer.setVisibility(RelativeLayout.INVISIBLE);
     }
 
     public Loader<Cursor> getCursorLoader() {
@@ -51,7 +48,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public boolean isShowingProgress() {
-        return mProgressRL.getVisibility() == RelativeLayout.VISIBLE;
+        return progressContainer.getVisibility() == RelativeLayout.VISIBLE;
     }
 
 
